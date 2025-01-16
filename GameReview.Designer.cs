@@ -28,12 +28,32 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.seeAllbtn = new System.Windows.Forms.Button();
+            this.SuspendLayout();
+            // 
+            // seeAllbtn
+            // 
+            this.seeAllbtn.Location = new System.Drawing.Point(682, 398);
+            this.seeAllbtn.Name = "seeAllbtn";
+            this.seeAllbtn.Size = new System.Drawing.Size(95, 23);
+            this.seeAllbtn.TabIndex = 0;
+            this.seeAllbtn.Text = "See All Hands";
+            this.seeAllbtn.UseVisualStyleBackColor = true;
+            // 
+            // GameReview
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "GameReview";
+            this.Controls.Add(this.seeAllbtn);
+            this.Name = "GameReview";
+            this.Text = "Blackjack Trainer";
+            this.ResumeLayout(false);
+
         }
 
         #endregion
+
+        private System.Windows.Forms.Button seeAllbtn;
     }
 }

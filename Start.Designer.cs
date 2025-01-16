@@ -76,7 +76,7 @@
             this.gameStartbtn.Text = "Start";
             this.gameStartbtn.UseVisualStyleBackColor = true;
             // 
-            // Form1
+            // Start
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -85,8 +85,8 @@
             this.Controls.Add(this.playersPanel);
             this.Controls.Add(this.gameReviewCB);
             this.Controls.Add(this.playerNumUpDown);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "Start";
+            this.Text = "Blackjack Trainer";
             ((System.ComponentModel.ISupportInitialize)(this.playerNumUpDown)).EndInit();
             this.playersPanel.ResumeLayout(false);
             this.ResumeLayout(false);
