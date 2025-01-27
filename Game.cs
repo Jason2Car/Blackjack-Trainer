@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -16,7 +17,7 @@ namespace Blackjack_Trainer
     {
         private List<Card> cards;
         private Stack<Card> deck;
-        private ArrayList<Player> players;
+        private List<Player> players;
         public Game()
         {
             InitializeComponent();
@@ -30,6 +31,8 @@ namespace Blackjack_Trainer
                     cards.Add(new Card(val, suit, cardImgList.Images[val * 4+ suit]));
                 }
             }
+            //need to initialize players
+
 
             //Now that deck is created, shuffle into deck
             deck = new Stack<Card>();
@@ -40,7 +43,14 @@ namespace Blackjack_Trainer
                 deck.Push(cards.ElementAt(pos));
                 cards.RemoveAt(pos);
             }
-            
+
+
+            foreach (Player cur in players)
+            {
+                cur.addCard(0, deck.Pop());
+                cur.addCard(0, deck.Pop());
+            }
+
         }
     }
 }

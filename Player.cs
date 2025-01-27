@@ -29,5 +29,9 @@ namespace Blackjack_Trainer
         {
             return style;
         }
+        public void addCard(int hand, Card card)
+        {
+            deck[hand].Add(card);
+        }
     }
 }
