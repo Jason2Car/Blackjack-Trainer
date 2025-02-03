@@ -28,7 +28,7 @@ namespace Blackjack_Trainer
         {
             return suit;
         }
-        public int getImage()
+        public Image getImage()
         {
             return img;
         }

@@ -17,6 +17,7 @@ namespace Blackjack_Trainer
     {
         private List<Card> cards;
         private Stack<Card> deck;
+        private List<Card> inHands;
         private List<Player> players;
         public Game()
         {
@@ -51,6 +52,34 @@ namespace Blackjack_Trainer
                 cur.addCard(0, deck.Pop());
             }
 
+        }
+        public bool stillPlay()
+        {
+            bool cont = false;
+            foreach (Player i in players) 
+            { 
+                if (i.stillIn()) 
+                { 
+                    cont = true; 
+                }
+            }
+            return cont;
+        }
+
+        public Stack<Card> GetDeck()
+        {
+            Stack<Card> temp = new Stack<Card>(cards);
+            return temp;
+        }
+
+        public int handSum() 
+        {
+            int sum = 0;
+            foreach(Card i in inHands)
+            {
+                sum = sum + i.getVal();            
+            }
+            return sum;
         }
     }
 }
