@@ -19,6 +19,8 @@ namespace Blackjack_Trainer
         private Stack<Card> deck;
         private List<Card> inHands;
         private List<Player> players;
+
+        private bool btnSelected = false;
         public Game()
         {
             InitializeComponent();
@@ -35,23 +37,31 @@ namespace Blackjack_Trainer
             //need to initialize players
 
 
-            //Now that deck is created, shuffle into deck
-            deck = new Stack<Card>();
-            Random rand = new Random();
-            for (int i = 0; i < 52; i++) 
+            
+
+
+            
+            do
             {
-                int pos =(int) (cardImgList.Images.Count * rand.NextDouble());
-                deck.Push(cards.ElementAt(pos));
-                cards.RemoveAt(pos);
-            }
+                playGame();
+            } while (!btnSelected);
 
-
-            foreach (Player cur in players)
+        }
+        public void playGame()
+        {
+            deck = GetDeck();
+            foreach (Player cur in players) //distributing cards
             {
                 cur.addCard(0, deck.Pop());
                 cur.addCard(0, deck.Pop());
             }
-
+            while (stillPlay())
+            {
+                foreach (Player cur in players)
+                {
+                    cur.turn(this);
+                }
+            }
         }
         public bool stillPlay()
         {
@@ -64,6 +74,20 @@ namespace Blackjack_Trainer
                 }
             }
             return cont;
+        }
+
+        public Stack<Card> NewDeck() 
+        {
+            deck = new Stack<Card>();
+            List<Card> tempCards = new List<Card>(cards);
+            Random rand = new Random();
+            for (int i = 0; i < 52; i++)
+            {
+                int pos = (int)(tempCards.Count * rand.NextDouble());
+                deck.Push(tempCards.ElementAt(pos));
+                tempCards.RemoveAt(pos);
+            }
+            return deck;
         }
 
         public Stack<Card> GetDeck()

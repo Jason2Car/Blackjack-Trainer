@@ -11,10 +11,13 @@ namespace Blackjack_Trainer
     {
         
         private int diff;
-        private int style;
+        private float style;
         private List<List<Card>> deck;
         private int handVal;
         private int handValAce;
+        private int[] decision = new int[] { 1, 2, 3, 5, 7, 11, 13 };
+        private bool bot;
+        private int btnPressed = 0;
         public Player() { }
         public Player(int d, int s) { 
             diff = d;
@@ -25,7 +28,7 @@ namespace Blackjack_Trainer
         {
             return diff;
         }
-        public int getStyle()
+        public float getStyle()
         {
             return style;
         }
@@ -49,6 +52,29 @@ namespace Blackjack_Trainer
         public void addCard(int hand, Card card)
         {
             deck[hand].Add(card);
+        }
+
+        public String turn(Game g) 
+        {
+            String ret = "";
+            if (stillIn()) 
+            {
+                if (!bot)
+                {
+                    while (btnPressed==0)
+                    {
+
+                    }
+                    
+                }
+                else {
+                    if (style * evalRisk(g) + handVal > 21 + diff) 
+                    {
+                        
+                    }
+                }
+            }
+            return ret;
         }
     }
 }

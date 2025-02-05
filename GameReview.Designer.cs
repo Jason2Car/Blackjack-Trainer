@@ -28,24 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.seeAllbtn = new System.Windows.Forms.Button();
+            this.btnSeeAll = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // seeAllbtn
+            // btnSeeAll
             // 
-            this.seeAllbtn.Location = new System.Drawing.Point(682, 398);
-            this.seeAllbtn.Name = "seeAllbtn";
-            this.seeAllbtn.Size = new System.Drawing.Size(95, 23);
-            this.seeAllbtn.TabIndex = 0;
-            this.seeAllbtn.Text = "See All Hands";
-            this.seeAllbtn.UseVisualStyleBackColor = true;
+            this.btnSeeAll.Location = new System.Drawing.Point(682, 398);
+            this.btnSeeAll.Name = "btnSeeAll";
+            this.btnSeeAll.Size = new System.Drawing.Size(95, 23);
+            this.btnSeeAll.TabIndex = 0;
+            this.btnSeeAll.Text = "See All Hands";
+            this.btnSeeAll.UseVisualStyleBackColor = true;
             // 
             // GameReview
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.seeAllbtn);
+            this.Controls.Add(this.btnSeeAll);
             this.Name = "GameReview";
             this.Text = "Blackjack Trainer";
             this.ResumeLayout(false);
@@ -54,6 +54,6 @@
 
         #endregion
 
-        private System.Windows.Forms.Button seeAllbtn;
+        private System.Windows.Forms.Button btnSeeAll;
     }
 }

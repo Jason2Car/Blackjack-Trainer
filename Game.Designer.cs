@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Game));
             this.cardImgList = new System.Windows.Forms.ImageList(this.components);
+            this.nxtRndBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cardImgList
@@ -90,11 +91,21 @@
             this.cardImgList.Images.SetKeyName(50, "king_of_hearts.png");
             this.cardImgList.Images.SetKeyName(51, "king_of_spades.png");
             // 
+            // nxtRndBtn
+            // 
+            this.nxtRndBtn.Location = new System.Drawing.Point(525, 295);
+            this.nxtRndBtn.Name = "nxtRndBtn";
+            this.nxtRndBtn.Size = new System.Drawing.Size(75, 23);
+            this.nxtRndBtn.TabIndex = 0;
+            this.nxtRndBtn.Text = "btn";
+            this.nxtRndBtn.UseVisualStyleBackColor = true;
+            // 
             // Game
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.nxtRndBtn);
             this.Name = "Game";
             this.Text = "Blackjack Trainer";
             this.ResumeLayout(false);
@@ -104,5 +115,6 @@
         #endregion
 
         private System.Windows.Forms.ImageList cardImgList;
+        private System.Windows.Forms.Button nxtRndBtn;
     }
 }
