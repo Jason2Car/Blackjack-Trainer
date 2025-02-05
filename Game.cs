@@ -40,11 +40,14 @@ namespace Blackjack_Trainer
             
 
 
-            
+            bool newGame = false;
             do
             {
                 playGame();
-            } while (!btnSelected);
+                //when game over show results screen
+                while (!btnSelected) { 
+                }
+            } while (newGame);
 
         }
         public void playGame()

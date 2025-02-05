@@ -52,6 +52,15 @@ namespace Blackjack_Trainer
         public void addCard(int hand, Card card)
         {
             deck[hand].Add(card);
+            if (card.getVal() == 1)
+            {
+                handVal += 1;
+                handValAce += 11;
+            }
+            else
+            {
+                handVal += card.getVal();
+            }
         }
 
         public String turn(Game g) 
