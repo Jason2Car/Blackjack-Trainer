@@ -16,5 +16,18 @@ namespace Blackjack_Trainer
         {
             InitializeComponent();
         }
+
+        private void Start_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnGameStart_Click(object sender, EventArgs e)
+        {
+            Game game = new Game();
+            this.Close();
+            game.Show();
+            Application.Run();
+        }
     }
 }

@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.btnSeeAll = new System.Windows.Forms.Button();
+            this.txtExplain = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // btnSeeAll
@@ -40,20 +41,30 @@
             this.btnSeeAll.Text = "See All Hands";
             this.btnSeeAll.UseVisualStyleBackColor = true;
             // 
+            // txtExplain
+            // 
+            this.txtExplain.Location = new System.Drawing.Point(317, 258);
+            this.txtExplain.Name = "txtExplain";
+            this.txtExplain.Size = new System.Drawing.Size(100, 20);
+            this.txtExplain.TabIndex = 1;
+            // 
             // GameReview
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.txtExplain);
             this.Controls.Add(this.btnSeeAll);
             this.Name = "GameReview";
             this.Text = "Blackjack Trainer";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
         private System.Windows.Forms.Button btnSeeAll;
+        private System.Windows.Forms.TextBox txtExplain;
     }
 }

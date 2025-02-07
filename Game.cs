@@ -19,6 +19,7 @@ namespace Blackjack_Trainer
         private Stack<Card> deck;
         private List<Card> inHands;
         private List<Player> players;
+        private string data = "";
 
         private bool btnSelected = false;
         public Game()
@@ -62,6 +63,19 @@ namespace Blackjack_Trainer
             {
                 foreach (Player cur in players)
                 {
+                    if (!cur.getBot())
+                    {
+                        btnHit.Show();
+                        btnStand.Show();
+                        btnSplit.Show();
+                    }
+                    else
+                    {
+                        btnHit.Hide();
+                        btnStand.Hide();
+                        btnSplit.Hide();
+
+                    }
                     cur.turn(this);
                 }
             }

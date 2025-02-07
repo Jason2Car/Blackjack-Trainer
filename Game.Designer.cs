@@ -32,6 +32,11 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Game));
             this.cardImgList = new System.Windows.Forms.ImageList(this.components);
             this.nxtRndBtn = new System.Windows.Forms.Button();
+            this.btnStand = new System.Windows.Forms.Button();
+            this.btnHit = new System.Windows.Forms.Button();
+            this.btnSplit = new System.Windows.Forms.Button();
+            this.imgTable = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.imgTable)).BeginInit();
             this.SuspendLayout();
             // 
             // cardImgList
@@ -93,21 +98,63 @@
             // 
             // nxtRndBtn
             // 
-            this.nxtRndBtn.Location = new System.Drawing.Point(525, 295);
+            this.nxtRndBtn.Location = new System.Drawing.Point(687, 397);
             this.nxtRndBtn.Name = "nxtRndBtn";
             this.nxtRndBtn.Size = new System.Drawing.Size(75, 23);
             this.nxtRndBtn.TabIndex = 0;
             this.nxtRndBtn.Text = "btn";
             this.nxtRndBtn.UseVisualStyleBackColor = true;
             // 
+            // btnStand
+            // 
+            this.btnStand.Location = new System.Drawing.Point(249, 342);
+            this.btnStand.Name = "btnStand";
+            this.btnStand.Size = new System.Drawing.Size(75, 23);
+            this.btnStand.TabIndex = 1;
+            this.btnStand.Text = "Stand";
+            this.btnStand.UseVisualStyleBackColor = true;
+            // 
+            // btnHit
+            // 
+            this.btnHit.Location = new System.Drawing.Point(373, 342);
+            this.btnHit.Name = "btnHit";
+            this.btnHit.Size = new System.Drawing.Size(75, 23);
+            this.btnHit.TabIndex = 2;
+            this.btnHit.Text = "Hit";
+            this.btnHit.UseVisualStyleBackColor = true;
+            // 
+            // btnSplit
+            // 
+            this.btnSplit.Location = new System.Drawing.Point(495, 342);
+            this.btnSplit.Name = "btnSplit";
+            this.btnSplit.Size = new System.Drawing.Size(75, 23);
+            this.btnSplit.TabIndex = 3;
+            this.btnSplit.Text = "Split";
+            this.btnSplit.UseVisualStyleBackColor = true;
+            // 
+            // imgTable
+            // 
+            this.imgTable.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.imgTable.Image = ((System.Drawing.Image)(resources.GetObject("imgTable.Image")));
+            this.imgTable.Location = new System.Drawing.Point(51, -4);
+            this.imgTable.Name = "imgTable";
+            this.imgTable.Size = new System.Drawing.Size(711, 314);
+            this.imgTable.TabIndex = 4;
+            this.imgTable.TabStop = false;
+            // 
             // Game
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnSplit);
+            this.Controls.Add(this.btnHit);
+            this.Controls.Add(this.btnStand);
             this.Controls.Add(this.nxtRndBtn);
+            this.Controls.Add(this.imgTable);
             this.Name = "Game";
             this.Text = "Blackjack Trainer";
+            ((System.ComponentModel.ISupportInitialize)(this.imgTable)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -116,5 +163,9 @@
 
         private System.Windows.Forms.ImageList cardImgList;
         private System.Windows.Forms.Button nxtRndBtn;
+        private System.Windows.Forms.Button btnStand;
+        private System.Windows.Forms.Button btnHit;
+        private System.Windows.Forms.Button btnSplit;
+        private System.Windows.Forms.PictureBox imgTable;
     }
 }

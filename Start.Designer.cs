@@ -28,24 +28,25 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.UpDownNumplayer = new System.Windows.Forms.NumericUpDown();
+            this.UDNumPlayer = new System.Windows.Forms.NumericUpDown();
             this.CBGameReview = new System.Windows.Forms.ComboBox();
             this.panelPlayers = new System.Windows.Forms.Panel();
             this.VSBarPlayers = new System.Windows.Forms.VScrollBar();
             this.btnGameStart = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.UpDownNumplayer)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.UDNumPlayer)).BeginInit();
             this.panelPlayers.SuspendLayout();
             this.SuspendLayout();
             // 
-            // UpDownNumplayer
+            // UDNumPlayer
             // 
-            this.UpDownNumplayer.Location = new System.Drawing.Point(163, 152);
-            this.UpDownNumplayer.Name = "UpDownNumplayer";
-            this.UpDownNumplayer.Size = new System.Drawing.Size(45, 20);
-            this.UpDownNumplayer.TabIndex = 0;
+            this.UDNumPlayer.Location = new System.Drawing.Point(163, 152);
+            this.UDNumPlayer.Name = "UDNumPlayer";
+            this.UDNumPlayer.Size = new System.Drawing.Size(45, 20);
+            this.UDNumPlayer.TabIndex = 0;
             // 
             // CBGameReview
             // 
+            this.CBGameReview.DisplayMember = "1";
             this.CBGameReview.FormattingEnabled = true;
             this.CBGameReview.Location = new System.Drawing.Point(120, 241);
             this.CBGameReview.Name = "CBGameReview";
@@ -75,6 +76,7 @@
             this.btnGameStart.TabIndex = 3;
             this.btnGameStart.Text = "Start";
             this.btnGameStart.UseVisualStyleBackColor = true;
+            this.btnGameStart.Click += new System.EventHandler(this.btnGameStart_Click);
             // 
             // Start
             // 
@@ -84,10 +86,11 @@
             this.Controls.Add(this.btnGameStart);
             this.Controls.Add(this.panelPlayers);
             this.Controls.Add(this.CBGameReview);
-            this.Controls.Add(this.UpDownNumplayer);
+            this.Controls.Add(this.UDNumPlayer);
             this.Name = "Start";
             this.Text = "Blackjack Trainer";
-            ((System.ComponentModel.ISupportInitialize)(this.UpDownNumplayer)).EndInit();
+            this.Load += new System.EventHandler(this.Start_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.UDNumPlayer)).EndInit();
             this.panelPlayers.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -95,7 +98,7 @@
 
         #endregion
 
-        private System.Windows.Forms.NumericUpDown UpDownNumplayer;
+        private System.Windows.Forms.NumericUpDown UDNumPlayer;
         private System.Windows.Forms.ComboBox CBGameReview;
         private System.Windows.Forms.Panel panelPlayers;
         private System.Windows.Forms.VScrollBar VSBarPlayers;

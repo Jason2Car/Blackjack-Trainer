@@ -17,6 +17,7 @@ namespace Blackjack_Trainer
         private int handValAce;
         private int[] decision = new int[] { 1, 2, 3, 5, 7, 11, 13 };
         private bool bot;
+        private bool dealer;
         private int btnPressed = 0;
         public Player() { }
         public Player(int d, int s) { 
@@ -31,6 +32,10 @@ namespace Blackjack_Trainer
         public float getStyle()
         {
             return style;
+        }
+        public bool getBot()
+        {
+            return bot;
         }
         public bool stillIn() 
         {
@@ -77,7 +82,12 @@ namespace Blackjack_Trainer
                     
                 }
                 else {
-                    if (style * evalRisk(g) + handVal > 21 + diff) 
+                    Random rand = new Random();
+                    if (dealer) 
+                    {
+                    
+                    }
+                    else if (style * evalRisk(g) + handVal > 21 + diff * rand.NextDouble()) 
                     {
                         
                     }
