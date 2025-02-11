@@ -12,9 +12,11 @@ namespace Blackjack_Trainer
 {
     public partial class GameReview : Form
     {
-        public GameReview()
+        public GameReview(Data[] data)
         {
             InitializeComponent();
         }
+
+
     }
 }

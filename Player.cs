@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Blackjack_Trainer
 {
-    internal class Player
+    public class Player
     {
         
         private int diff;
@@ -54,7 +54,7 @@ namespace Blackjack_Trainer
             }
         }
 
-        public void addCard(int hand, Card card)
+        public Card addCard(int hand, Card card)
         {
             deck[hand].Add(card);
             if (card.getVal() == 1)
@@ -66,11 +66,12 @@ namespace Blackjack_Trainer
             {
                 handVal += card.getVal();
             }
+            return card;
         }
 
-        public String turn(Game g) 
+        public Data turn(Game g) 
         {
-            String ret = "";
+            Data ret = new Data();
             if (stillIn()) 
             {
                 if (!bot)
@@ -85,11 +86,18 @@ namespace Blackjack_Trainer
                     Random rand = new Random();
                     if (dealer) 
                     {
-                    
+                        if (handVal < 17)
+                        {
+                            ret = new Data(this, addCard(0, g.deck.Pop()), "Hit");
+                        }
+                        else 
+                        {
+                            ret = new Data(this, null, "Stand");
+                        }
                     }
                     else if (style * evalRisk(g) + handVal > 21 + diff * rand.NextDouble()) 
                     {
-                        
+                        ret = new Data(this, null, "Stand");
                     }
                 }
             }

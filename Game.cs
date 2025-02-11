@@ -16,7 +16,7 @@ namespace Blackjack_Trainer
     public partial class Game : Form
     {
         private List<Card> cards;
-        private Stack<Card> deck;
+        public Stack<Card> deck;
         private List<Card> inHands;
         private List<Player> players;
         private string data = "";
@@ -121,6 +121,21 @@ namespace Blackjack_Trainer
                 sum = sum + i.getVal();            
             }
             return sum;
+        }
+
+        private void btnStand_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnHit_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSplit_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
