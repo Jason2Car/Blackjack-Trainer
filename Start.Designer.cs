@@ -28,45 +28,32 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.UDNumPlayer = new System.Windows.Forms.NumericUpDown();
+            this.numUDNumPlayer = new System.Windows.Forms.NumericUpDown();
             this.CBGameReview = new System.Windows.Forms.ComboBox();
-            this.panelPlayers = new System.Windows.Forms.Panel();
-            this.VSBarPlayers = new System.Windows.Forms.VScrollBar();
             this.btnGameStart = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.UDNumPlayer)).BeginInit();
-            this.panelPlayers.SuspendLayout();
+            this.panelPlayers = new System.Windows.Forms.Panel();
+            this.vScrollBarPlayers = new System.Windows.Forms.VScrollBar();
+            ((System.ComponentModel.ISupportInitialize)(this.numUDNumPlayer)).BeginInit();
             this.SuspendLayout();
             // 
-            // UDNumPlayer
+            // numUDNumPlayer
             // 
-            this.UDNumPlayer.Location = new System.Drawing.Point(163, 152);
-            this.UDNumPlayer.Name = "UDNumPlayer";
-            this.UDNumPlayer.Size = new System.Drawing.Size(45, 20);
-            this.UDNumPlayer.TabIndex = 0;
+            this.numUDNumPlayer.Location = new System.Drawing.Point(163, 152);
+            this.numUDNumPlayer.Name = "numUDNumPlayer";
+            this.numUDNumPlayer.Size = new System.Drawing.Size(45, 20);
+            this.numUDNumPlayer.TabIndex = 0;
+            this.numUDNumPlayer.ValueChanged += new System.EventHandler(this.numUDNumPlayer_ValueChanged);
             // 
             // CBGameReview
             // 
-            this.CBGameReview.DisplayMember = "1";
             this.CBGameReview.FormattingEnabled = true;
+            this.CBGameReview.Items.AddRange(new object[] {
+            "After Game",
+            "During Game"});
             this.CBGameReview.Location = new System.Drawing.Point(120, 241);
             this.CBGameReview.Name = "CBGameReview";
             this.CBGameReview.Size = new System.Drawing.Size(121, 21);
             this.CBGameReview.TabIndex = 1;
-            // 
-            // panelPlayers
-            // 
-            this.panelPlayers.Controls.Add(this.VSBarPlayers);
-            this.panelPlayers.Location = new System.Drawing.Point(465, 126);
-            this.panelPlayers.Name = "panelPlayers";
-            this.panelPlayers.Size = new System.Drawing.Size(200, 100);
-            this.panelPlayers.TabIndex = 2;
-            // 
-            // VSBarPlayers
-            // 
-            this.VSBarPlayers.Location = new System.Drawing.Point(183, 11);
-            this.VSBarPlayers.Name = "VSBarPlayers";
-            this.VSBarPlayers.Size = new System.Drawing.Size(17, 80);
-            this.VSBarPlayers.TabIndex = 0;
             // 
             // btnGameStart
             // 
@@ -78,31 +65,46 @@
             this.btnGameStart.UseVisualStyleBackColor = true;
             this.btnGameStart.Click += new System.EventHandler(this.btnGameStart_Click);
             // 
+            // panelPlayers
+            // 
+            this.panelPlayers.Location = new System.Drawing.Point(283, 113);
+            this.panelPlayers.Name = "panelPlayers";
+            this.panelPlayers.Size = new System.Drawing.Size(402, 100);
+            this.panelPlayers.TabIndex = 4;
+            // 
+            // vScrollBarPlayers
+            // 
+            this.vScrollBarPlayers.Location = new System.Drawing.Point(688, 113);
+            this.vScrollBarPlayers.Name = "vScrollBarPlayers";
+            this.vScrollBarPlayers.Size = new System.Drawing.Size(15, 100);
+            this.vScrollBarPlayers.TabIndex = 5;
+            this.vScrollBarPlayers.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vScrollBarPlayers_Scroll);
+            // 
             // Start
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.btnGameStart);
+            this.Controls.Add(this.vScrollBarPlayers);
             this.Controls.Add(this.panelPlayers);
+            this.Controls.Add(this.btnGameStart);
             this.Controls.Add(this.CBGameReview);
-            this.Controls.Add(this.UDNumPlayer);
+            this.Controls.Add(this.numUDNumPlayer);
             this.Name = "Start";
             this.Text = "Blackjack Trainer";
             this.Load += new System.EventHandler(this.Start_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.UDNumPlayer)).EndInit();
-            this.panelPlayers.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numUDNumPlayer)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.NumericUpDown UDNumPlayer;
+        private System.Windows.Forms.NumericUpDown numUDNumPlayer;
         private System.Windows.Forms.ComboBox CBGameReview;
-        private System.Windows.Forms.Panel panelPlayers;
-        private System.Windows.Forms.VScrollBar VSBarPlayers;
         private System.Windows.Forms.Button btnGameStart;
+        private System.Windows.Forms.Panel panelPlayers;
+        private System.Windows.Forms.VScrollBar vScrollBarPlayers;
     }
 }
 

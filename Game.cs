@@ -125,17 +125,17 @@ namespace Blackjack_Trainer
 
         private void btnStand_Click(object sender, EventArgs e)
         {
-
+            players[players.Count - 1].press(1);
         }
 
         private void btnHit_Click(object sender, EventArgs e)
         {
-
+            players[players.Count - 1].press(2);
         }
 
         private void btnSplit_Click(object sender, EventArgs e)
         {
-
+            players[players.Count - 1].press(3);
         }
     }
 }

@@ -76,10 +76,28 @@ namespace Blackjack_Trainer
             {
                 if (!bot)
                 {
-                    while (btnPressed==0)
+                    bool decisionMade = false;
+                    while (decisionMade)
                     {
-
+                        switch (btnPressed) 
+                        {
+                            case 1:
+                                ret = new Data(this, addCard(0, g.deck.Pop()), "Hit");
+                                decisionMade = true;
+                                btnPressed = 0;
+                                break;
+                            case 2:
+                                ret = new Data(this, null, "Stand");
+                                decisionMade = true;
+                                btnPressed = 0;
+                                break;
+                            case 3:
+                                decisionMade = true;
+                                btnPressed = 0;
+                                break;
+                        }
                     }
+                    btnPressed = 0;
                     
                 }
                 else {
@@ -102,6 +120,10 @@ namespace Blackjack_Trainer
                 }
             }
             return ret;
+        }
+        public void press(int selected) 
+        {
+            btnPressed = selected;
         }
     }
 }
