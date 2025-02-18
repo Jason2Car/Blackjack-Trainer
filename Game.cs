@@ -15,17 +15,18 @@ namespace Blackjack_Trainer
 {
     public partial class Game : Form
     {
-        private List<Card> cards;
-        public Stack<Card> deck;
-        private List<Card> inHands;
-        private List<Player> players;
+        private List<Card> cards = new List<Card>();
+        public Stack<Card> deck = new Stack<Card>();
+        private List<Card> inHands = new List<Card>();
+        private List<Player> players = new List<Player>();
         private string data = "";
 
         private bool btnSelected = false;
-        public Game()
+        public Game(List<Player> p)
         {
             InitializeComponent();
-
+            MessageBox.Show("Made it to the new world");
+            players = p;
             //Initialize cards, add one of each suit, total 52
             cards = new List<Card>();
             for (int val = 0; val < 13; val++)
@@ -36,10 +37,6 @@ namespace Blackjack_Trainer
                 }
             }
             //need to initialize players
-
-
-            
-
 
             bool newGame = false;
             do
@@ -56,8 +53,8 @@ namespace Blackjack_Trainer
             deck = GetDeck();
             foreach (Player cur in players) //distributing cards
             {
-                cur.addCard(0, deck.Pop());
-                cur.addCard(0, deck.Pop());
+                inHands.Add(cur.addCard(0, deck.Pop()));
+                inHands.Add(cur.addCard(0, deck.Pop()));
             }
             while (stillPlay())
             {

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -15,6 +16,8 @@ namespace Blackjack_Trainer
     {
         int original;
         List<Panel> players;
+        Point diffLoc = new Point(0,0);
+        Point playLoc = new Point(150,0);
         public Start()
         {
             InitializeComponent();
@@ -38,10 +41,67 @@ namespace Blackjack_Trainer
         private void btnGameStart_Click(object sender, EventArgs e)
         {
             int numPlayers = Convert.ToInt32(numUDNumPlayer.Value);
-            Game game = new Game();
-            this.Close();
-            game.Show();
-            Application.Run();
+            List<Player> playing = new List<Player>();
+            Player client = new Player();
+            Player dealer = new Player(-1,-1,true);
+            playing.Add(dealer);
+            bool misinput = false;
+            foreach (Panel p in players) 
+            {
+                int diff=1;
+                int play=1;
+                foreach (Control c in p.Controls)
+                {
+                    if (c.Location == diffLoc)
+                    {
+                        switch (c.Text)
+                        {
+                            case "Easy":
+                                diff = 1;
+                                break;
+                            case "Hard":
+                                diff = 2;
+                                break;
+                            default:
+                                misinput = true;
+                                //MessageBox.Show("Difficulty input is somehow wrong");
+                                break;
+                        }
+                    }
+                    else if (c.Location == playLoc)
+                    {
+                        switch (c.Text)
+                        {
+                            case "Risky":
+                                play = 1;
+                                break;
+                            case "Conservative":
+                                play = 2;
+                                break;
+                            case "Allseeing":
+                                play = 2;
+                                break;
+                            default:
+                                misinput = true;
+                                //MessageBox.Show("Playsyle input is somehow wrong");
+                                break;
+                        }
+                    }
+                    playing.Add(new Player(diff, play, false));
+                }
+            }
+            playing.Add(client);
+            if (misinput)
+            {
+                MessageBox.Show("Input is somehow wrong");
+            }
+            else 
+            {
+                Game game = new Game(playing);
+                //this.Hide();
+                game.Show();
+                //Application.Run(game);
+            }
         }
 
         private void vScrollBarPlayers_Scroll(object sender, ScrollEventArgs e)
@@ -55,38 +115,41 @@ namespace Blackjack_Trainer
             {
                 for (int i = 0; i < numUDNumPlayer.Value - original; i++)
                 {
-
-                    Panel player = new Panel();
+                    Panel playerSetting = new Panel();
                     ComboBox difficulty = new ComboBox();
-                    difficulty.Location = new Point(0, 0);
+                    difficulty.Items.Add("Easy");
+                    difficulty.Items.Add("Hard");
+                    difficulty.Location = diffLoc;
                     ComboBox playstyle = new ComboBox();
-                    playstyle.Location = new Point(200, 0);
-                    player.Controls.Add(difficulty);
-                    player.Controls.Add(playstyle);
-                    player.BackColor = Color.Red;
+                    playstyle.Items.Add("Risky");
+                    playstyle.Items.Add("Conservative");
+                    playstyle.Items.Add("Allseeing");
+                    playstyle.Location = playLoc;
+                    playerSetting.Controls.Add(difficulty);
+                    playerSetting.Controls.Add(playstyle);
+                    playerSetting.BackColor = Color.Red;
                     //player.ForeColor = Color.Green;
-                    player.Width = 400;
-                    player.Height = 50;
-                    player.Location = new Point(30, (original + i) * 100);
-                    panelPlayers.Controls.Add(player);
-                    players.Append(player);
+                    playerSetting.Width = 400;
+                    playerSetting.Height = 50;
+                    playerSetting.Location = new Point(30, (original + i) * 60);
+                    panelPlayers.Controls.Add(playerSetting);
+                    players.Add(playerSetting);
                 }
             }
             else 
             {
                 for (int i = 0; i < original - numUDNumPlayer.Value; i++)
                 {
-                    if (players.Count != 0)
-                    {
-                        panelPlayers.Controls.RemoveAt(original--);
-                        players.Remove(players.Last());
-
-                    }
+                    panelPlayers.Controls.Remove(players.Last());
+                    players.Remove(players.Last());
+                    panelPlayers.Refresh();
                 }
             }
             if (!vScrollBarPlayers.Enabled)
                 vScrollBarPlayers.Enabled = true;
             original = Convert.ToInt32(numUDNumPlayer.Value);
+            //MessageBox.Show(""+panelPlayers.Controls.Count+" "+players.Count);
+
         }
 
         void panelPlayers_ControlRemoved(object sender, ControlEventArgs e)

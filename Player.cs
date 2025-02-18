@@ -12,17 +12,29 @@ namespace Blackjack_Trainer
         
         private int diff;
         private float style;
-        private List<List<Card>> deck;
+        private List<List<Card>> deck = new List<List<Card>>();
         private int handVal;
         private int handValAce;
         private int[] decision = new int[] { 1, 2, 3, 5, 7, 11, 13 };
         private bool bot;
         private bool dealer;
         private int btnPressed = 0;
-        public Player() { }
-        public Player(int d, int s) { 
+        public Player() 
+        {
+            dealer = false;
+            bot = false;
+            handVal = 0;
+            handValAce = 0;
+            deck.Add(new List<Card>());
+        }
+        public Player(int d, int s, bool deal) { 
             diff = d;
             style = s;
+            dealer = deal;
+            handVal = 0;
+            handValAce = 0;
+            bot = true;
+            deck.Add(new List<Card>());
         }
 
         public int getDifficulty()
@@ -50,7 +62,15 @@ namespace Blackjack_Trainer
             }
             else
             {
-                return (340 - g.handSum())/(52-g.GetDeck().Count);
+                try
+                {
+                    return (340 - g.handSum()) / (g.GetDeck().Count);
+                }
+                catch (Exception e) 
+                {
+                    //divides by zero when there are no cards, so act like there's a full deck left
+                    return 340;
+                }
             }
         }
 
