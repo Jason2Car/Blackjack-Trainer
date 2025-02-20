@@ -95,12 +95,11 @@ namespace Blackjack_Trainer
             {
                 MessageBox.Show("Input is somehow wrong");
             }
-            else 
+            else
             {
                 Game game = new Game(playing);
-                //this.Hide();
-                game.Show();
-                //Application.Run(game);
+                this.Hide(); // Hide the Start form
+                game.Show(); // Show the Game form
             }
         }
 

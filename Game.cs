@@ -13,6 +13,7 @@ using System.Windows.Forms;
 
 namespace Blackjack_Trainer
 {
+  
     public partial class Game : Form
     {
         private List<Card> cards = new List<Card>();
@@ -38,20 +39,30 @@ namespace Blackjack_Trainer
             }
             //need to initialize players
 
+            this.Load += async (sender, e) => await InitializeGameAsync();
+        }
+
+        private async Task InitializeGameAsync()
+        {
+            await StartGameAsync();
+        }
+        private async Task StartGameAsync()
+        {
             bool newGame = false;
             do
             {
-                playGame();
-                //when game over show results screen
-                while (!btnSelected) { 
+                await PlayGameAsync();
+                // when game over show results screen
+                while (!btnSelected)
+                {
+                    await Task.Delay(100); // Avoid blocking the UI thread
                 }
             } while (newGame);
-
         }
-        public void playGame()
+        public async Task PlayGameAsync()
         {
             deck = GetDeck();
-            foreach (Player cur in players) //distributing cards
+            foreach (Player cur in players) // distributing cards
             {
                 inHands.Add(cur.addCard(0, deck.Pop()));
                 inHands.Add(cur.addCard(0, deck.Pop()));
@@ -71,11 +82,62 @@ namespace Blackjack_Trainer
                         btnHit.Hide();
                         btnStand.Hide();
                         btnSplit.Hide();
+                        DisplayPlayerHand(cur);
+                    }
+                    await cur.turnAsync(this); // Assuming turn method is also made async
+                    if (cur.getBot())
+                    {
+                        await PauseAsync(5000);
+                        HidePlayerHand(cur);
 
                     }
-                    cur.turn(this);
+                    
                 }
             }
+        }
+
+        private void DisplayPlayerHand(Player player)
+        {
+            //if time, use directory to preload image boxes and can use card
+            //values to get which image to show, then no need to hold images in cards
+            // Display current hand
+            if (player.getBot())
+            {
+                //if the bot, then use this to show cards
+                int xOffset = 100; // Starting X position
+                int yOffset = 300; // Starting Y position
+                int cardSpacing = 100; // Space between cards
+
+            }
+            else 
+            {
+                //if the client, then use this to update cards. There cards will always be displayed
+                int xOffset = 500; // Starting X position
+                int yOffset = 300; // Starting Y position
+                int cardSpacing = 100; // Space between cards
+            }
+
+            foreach (List<Card> hand in player.getDeck())
+            {
+                for (int i = 0; i < hand.Count; i++)
+                {
+                    PictureBox pic = hand[i].getPictureBox();
+                    pic.Location = new Point(xOffset + (i * cardSpacing), yOffset);
+                    pic.BringToFront();
+                    this.Controls.Add(pic);
+                }
+            }
+        }
+
+        private void HidePlayerHand(Player player)
+        {
+            foreach (List<Card> hand in player.getDeck())
+                foreach (Card card in hand)
+                {
+
+                    this.Controls.Remove(card.getPictureBox());
+                    card.getPictureBox().Dispose();
+                }
         }
         public bool stillPlay()
         {
@@ -119,20 +181,25 @@ namespace Blackjack_Trainer
             }
             return sum;
         }
-
-        private void btnStand_Click(object sender, EventArgs e)
+        private void btnHit_Click(object sender, EventArgs e)
         {
             players[players.Count - 1].press(1);
         }
 
-        private void btnHit_Click(object sender, EventArgs e)
+        private void btnStand_Click(object sender, EventArgs e)
         {
             players[players.Count - 1].press(2);
         }
 
+
         private void btnSplit_Click(object sender, EventArgs e)
         {
             players[players.Count - 1].press(3);
+        }
+        public async Task PauseAsync(int milliseconds)
+        {
+            await Task.Delay(milliseconds);
+            // Code to execute after the delay
         }
     }
 }

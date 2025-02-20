@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Blackjack_Trainer
 {
@@ -89,7 +90,12 @@ namespace Blackjack_Trainer
             return card;
         }
 
-        public Data turn(Game g) 
+        public List<List<Card>> getDeck() 
+        {
+            return deck;
+        }
+
+        public async Task<Data> turnAsync(Game g) 
         {
             Data ret = new Data();
             if (stillIn()) 
@@ -97,43 +103,51 @@ namespace Blackjack_Trainer
                 if (!bot)
                 {
                     bool decisionMade = false;
-                    while (decisionMade)
+                    while (!decisionMade)
                     {
-                        switch (btnPressed) 
+                        switch (btnPressed)
                         {
                             case 1:
                                 ret = new Data(this, addCard(0, g.deck.Pop()), "Hit");
                                 decisionMade = true;
+                                MessageBox.Show("Hit");
                                 btnPressed = 0;
                                 break;
                             case 2:
                                 ret = new Data(this, null, "Stand");
                                 decisionMade = true;
+                                MessageBox.Show("Stand");
                                 btnPressed = 0;
                                 break;
                             case 3:
                                 decisionMade = true;
+                                MessageBox.Show("Split");
                                 btnPressed = 0;
                                 break;
+
+                        }
+
+                        if (!decisionMade)
+                        {
+                            await Task.Delay(100); // Avoid blocking the UI thread
                         }
                     }
-                    btnPressed = 0;
-                    
                 }
-                else {
+                else
+                {
                     Random rand = new Random();
-                    if (dealer) 
+                    if (dealer)
                     {
                         if (handVal < 17)
                         {
                             ret = new Data(this, addCard(0, g.deck.Pop()), "Hit");
                         }
-                        else 
+                        else
                         {
                             ret = new Data(this, null, "Stand");
                         }
                     }
-                    else if (style * evalRisk(g) + handVal > 21 + diff * rand.NextDouble()) 
+                    else if (style * evalRisk(g) + handVal > 21 + diff * rand.NextDouble())
                     {
                         ret = new Data(this, null, "Stand");
                     }
