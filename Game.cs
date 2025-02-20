@@ -101,21 +101,11 @@ namespace Blackjack_Trainer
             //if time, use directory to preload image boxes and can use card
             //values to get which image to show, then no need to hold images in cards
             // Display current hand
-            if (player.getBot())
-            {
-                //if the bot, then use this to show cards
-                int xOffset = 100; // Starting X position
-                int yOffset = 300; // Starting Y position
-                int cardSpacing = 100; // Space between cards
+            //if the bot, then use this to show cards
+            int xOffset = 100; // Starting X position
+            int yOffset = 300; // Starting Y position
+            int cardSpacing = 100; // Space between cards
 
-            }
-            else 
-            {
-                //if the client, then use this to update cards. There cards will always be displayed
-                int xOffset = 500; // Starting X position
-                int yOffset = 300; // Starting Y position
-                int cardSpacing = 100; // Space between cards
-            }
 
             foreach (List<Card> hand in player.getDeck())
             {
