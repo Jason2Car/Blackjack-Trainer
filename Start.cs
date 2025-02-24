@@ -87,8 +87,8 @@ namespace Blackjack_Trainer
                                 break;
                         }
                     }
-                    playing.Add(new Player(diff, play, false));
                 }
+                playing.Add(new Player(diff, play, false));
             }
             playing.Add(client);
             if (misinput)

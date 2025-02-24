@@ -20,14 +20,15 @@ namespace Blackjack_Trainer
         public Stack<Card> deck = new Stack<Card>();
         private List<Card> inHands = new List<Card>();
         private List<Player> players = new List<Player>();
-        private string data = "";
+        private List<int> winings = new List<int>();
+        private List<Data> data = new List<Data>();
 
         private bool btnSelected = false;
         public Game(List<Player> p)
         {
             InitializeComponent();
-            MessageBox.Show("Made it to the new world");
             players = p;
+            MessageBox.Show("" + players.Last().stillIn()+" " + players.Last().hasStood());
             //Initialize cards, add one of each suit, total 52
             cards = new List<Card>();
             for (int val = 0; val < 13; val++)
@@ -52,6 +53,8 @@ namespace Blackjack_Trainer
             do
             {
                 await PlayGameAsync();
+                MessageBox.Show("" + players.Last().stillIn() + " " + players.Last().hasStood());
+                MessageBox.Show("Game Over, Player "+findWinner()+" won");
                 // when game over show results screen
                 while (!btnSelected)
                 {
@@ -66,9 +69,13 @@ namespace Blackjack_Trainer
             {
                 inHands.Add(cur.addCard(0, deck.Pop()));
                 inHands.Add(cur.addCard(0, deck.Pop()));
+
             }
+            DisplayPlayerHand(players.First());//dealer's first
+            DisplayPlayerHand(players.Last());//client's last
             while (stillPlay())
             {
+                MessageBox.Show("made into while loop");
                 foreach (Player cur in players)
                 {
                     if (!cur.getBot())
@@ -82,64 +89,37 @@ namespace Blackjack_Trainer
                         btnHit.Hide();
                         btnStand.Hide();
                         btnSplit.Hide();
-                        DisplayPlayerHand(cur);
                     }
-                    await cur.turnAsync(this); // Assuming turn method is also made async
-                    if (cur.getBot())
+                    await cur.turnAsync(this); 
+                    if (!cur.getBot() || cur.getDealer())
                     {
+                        HidePlayerHand(cur);//no need to wait since dealer has rules
+                        //MessageBox.Show("got here");
+                        await PauseAsync(2000);
+                        DisplayPlayerHand(cur);
+
+                    }
+                    else
+                    {
+                        DisplayPlayerHand(cur);
                         await PauseAsync(5000);
                         HidePlayerHand(cur);
-
                     }
-                    
+
                 }
             }
         }
 
-        private void DisplayPlayerHand(Player player)
-        {
-            //if time, use directory to preload image boxes and can use card
-            //values to get which image to show, then no need to hold images in cards
-            // Display current hand
-            //if the bot, then use this to show cards
-            int xOffset = 100; // Starting X position
-            int yOffset = 300; // Starting Y position
-            int cardSpacing = 100; // Space between cards
-
-
-            foreach (List<Card> hand in player.getDeck())
-            {
-                for (int i = 0; i < hand.Count; i++)
-                {
-                    PictureBox pic = hand[i].getPictureBox();
-                    pic.Location = new Point(xOffset + (i * cardSpacing), yOffset);
-                    pic.BringToFront();
-                    this.Controls.Add(pic);
-                }
-            }
-        }
-
-        private void HidePlayerHand(Player player)
-        {
-            foreach (List<Card> hand in player.getDeck())
-                foreach (Card card in hand)
-                {
-
-                    this.Controls.Remove(card.getPictureBox());
-                    card.getPictureBox().Dispose();
-                }
-        }
         public bool stillPlay()
         {
-            bool cont = false;
             foreach (Player i in players) 
             { 
-                if (i.stillIn()) 
+                if (i.stillIn() && !i.hasStood()) 
                 { 
-                    cont = true; 
+                    return true; 
                 }
             }
-            return cont;
+            return false;
         }
 
         public Stack<Card> NewDeck() 
@@ -153,6 +133,7 @@ namespace Blackjack_Trainer
                 deck.Push(tempCards.ElementAt(pos));
                 tempCards.RemoveAt(pos);
             }
+            MessageBox.Show("New deck added");
             return deck;
         }
 
@@ -170,6 +151,71 @@ namespace Blackjack_Trainer
                 sum = sum + i.getVal();            
             }
             return sum;
+        }
+
+        public int findWinner() 
+        {
+            int max = 0;
+            int winner = 0;
+            for (int i = 0; i < players.Count; i++)
+            {
+                if (players[i].getHand() > max)
+                {
+                    max = players[i].getHand();
+                    winner = i;
+                }
+            }
+            return winner;
+        }
+        private void DisplayPlayerHand(Player player)
+        {
+            //if time, use directory to preload image boxes and can use card
+            //values to get which image to show, then no need to hold images in cards
+            // Display current hand
+
+            int xOffset; // Starting X position
+            int yOffset;  // Starting Y position
+            int cardSpacing = 100; // Space between cards
+            if (player.getDealer())
+            {
+                xOffset = 300;
+                yOffset = 100;
+                //MessageBox.Show("Dealer hand size: "+player.getDeck()[0].Count);
+            }
+            else if (!player.getBot())
+            {
+                xOffset = 500;
+                yOffset = 300;
+            }
+            else
+            {
+                xOffset = 100;
+                yOffset = 300;
+            }
+            //if the bot, then use this to show cards
+
+
+            foreach (List<Card> hand in player.getDeck())
+            {
+                for (int i = 0; i < hand.Count; i++)
+                {
+                    PictureBox pic = hand[i].getPictureBox();
+                    pic.Location = new Point(xOffset + (i * cardSpacing), yOffset);
+                    this.Controls.Add(pic);
+                    pic.BringToFront();
+                }
+            }
+        }
+
+        private void HidePlayerHand(Player player)
+        {
+            foreach (List<Card> hand in player.getDeck())
+                foreach (Card card in hand)
+                {
+
+                    this.Controls.Remove(card.getPictureBox());
+                    //card.getPictureBox().Dispose();
+                }
         }
         private void btnHit_Click(object sender, EventArgs e)
         {

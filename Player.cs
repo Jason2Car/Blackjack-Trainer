@@ -14,26 +14,23 @@ namespace Blackjack_Trainer
         private int diff;
         private float style;
         private List<List<Card>> deck = new List<List<Card>>();
-        private int handVal;
-        private int handValAce;
+        private int handVal=0;
+        private int handValAce=0;
         private int[] decision = new int[] { 1, 2, 3, 5, 7, 11, 13 };
         private bool bot;
         private bool dealer;
         private int btnPressed = 0;
+        private bool stood = false;
         public Player() 
         {
             dealer = false;
             bot = false;
-            handVal = 0;
-            handValAce = 0;
             deck.Add(new List<Card>());
         }
         public Player(int d, int s, bool deal) { 
             diff = d;
             style = s;
             dealer = deal;
-            handVal = 0;
-            handValAce = 0;
             bot = true;
             deck.Add(new List<Card>());
         }
@@ -50,9 +47,27 @@ namespace Blackjack_Trainer
         {
             return bot;
         }
+
+        public bool getDealer()
+        {
+            return dealer;
+        }
         public bool stillIn() 
         {
             return (handVal <= 21 || handValAce <= 21);
+        }
+        public int getHand() 
+        {
+            if (!stillIn())
+            {
+                return -1;
+            }
+            return (handValAce > handVal && handValAce<=21)? handValAce: handVal;
+        }
+
+        public bool hasStood() 
+        {
+            return stood;
         }
 
         public int evalRisk(Game g) 
@@ -86,6 +101,7 @@ namespace Blackjack_Trainer
             else
             {
                 handVal += card.getVal();
+                handValAce += card.getVal();
             }
             return card;
         }
@@ -98,7 +114,7 @@ namespace Blackjack_Trainer
         public async Task<Data> turnAsync(Game g) 
         {
             Data ret = new Data();
-            if (stillIn()) 
+            if (stillIn() && !stood) 
             {
                 if (!bot)
                 {
@@ -108,14 +124,17 @@ namespace Blackjack_Trainer
                         switch (btnPressed)
                         {
                             case 1:
-                                ret = new Data(this, addCard(0, g.deck.Pop()), "Hit");
+                                Card card = g.deck.Pop();
+                                ret = new Data(this, addCard(0, card), "Hit");
                                 decisionMade = true;
+                                this.addCard(0, card);
                                 MessageBox.Show("Hit");
                                 btnPressed = 0;
                                 break;
                             case 2:
                                 ret = new Data(this, null, "Stand");
                                 decisionMade = true;
+                                stood = true;
                                 MessageBox.Show("Stand");
                                 btnPressed = 0;
                                 break;
@@ -126,11 +145,7 @@ namespace Blackjack_Trainer
                                 break;
 
                         }
-
-                        if (!decisionMade)
-                        {
-                            await Task.Delay(100); // Avoid blocking the UI thread
-                        }
+                        await Task.Delay(100); // Avoid blocking the UI thread
                     }
                 }
                 else
@@ -140,16 +155,29 @@ namespace Blackjack_Trainer
                     {
                         if (handVal < 17)
                         {
-                            ret = new Data(this, addCard(0, g.deck.Pop()), "Hit");
+                            Card card = g.deck.Pop();
+                            ret = new Data(this, addCard(0, card), "Hit");
+                            this.addCard(0, card);
                         }
                         else
                         {
                             ret = new Data(this, null, "Stand");
+                            stood = true;
                         }
                     }
-                    else if (style * evalRisk(g) + handVal > 21 + diff * rand.NextDouble())
+                    else 
                     {
-                        ret = new Data(this, null, "Stand");
+                        if (style * evalRisk(g) + handVal > 21 + diff * rand.NextDouble()) //if the player should hit
+                        {
+                            Card card = g.deck.Pop();
+                            ret = new Data(this, addCard(0, card), "Hit");
+                            this.addCard(0, card);
+                        }
+                        else //if the player should stand
+                        {
+                            ret = new Data(this, null, "Stand");
+                            stood = true;
+                        }
                     }
                 }
             }
