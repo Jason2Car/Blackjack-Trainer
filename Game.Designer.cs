@@ -83,18 +83,18 @@
             this.cardImgList.Images.SetKeyName(37, "10_of_diamonds.png");
             this.cardImgList.Images.SetKeyName(38, "10_of_hearts.png");
             this.cardImgList.Images.SetKeyName(39, "10_of_spades.png");
-            this.cardImgList.Images.SetKeyName(40, "jack_of_clubs.png");
-            this.cardImgList.Images.SetKeyName(41, "jack_of_diamonds.png");
-            this.cardImgList.Images.SetKeyName(42, "jack_of_hearts.png");
-            this.cardImgList.Images.SetKeyName(43, "jack_of_spades.png");
-            this.cardImgList.Images.SetKeyName(44, "queen_of_clubs.png");
-            this.cardImgList.Images.SetKeyName(45, "queen_of_diamonds.png");
-            this.cardImgList.Images.SetKeyName(46, "queen_of_hearts.png");
-            this.cardImgList.Images.SetKeyName(47, "queen_of_spades.png");
-            this.cardImgList.Images.SetKeyName(48, "king_of_clubs.png");
-            this.cardImgList.Images.SetKeyName(49, "king_of_diamonds.png");
-            this.cardImgList.Images.SetKeyName(50, "king_of_hearts.png");
-            this.cardImgList.Images.SetKeyName(51, "king_of_spades.png");
+            this.cardImgList.Images.SetKeyName(40, "jack_of_clubs2.png");
+            this.cardImgList.Images.SetKeyName(41, "jack_of_diamonds2.png");
+            this.cardImgList.Images.SetKeyName(42, "jack_of_hearts2.png");
+            this.cardImgList.Images.SetKeyName(43, "jack_of_spades2.png");
+            this.cardImgList.Images.SetKeyName(44, "queen_of_clubs2.png");
+            this.cardImgList.Images.SetKeyName(45, "queen_of_diamonds2.png");
+            this.cardImgList.Images.SetKeyName(46, "queen_of_hearts2.png");
+            this.cardImgList.Images.SetKeyName(47, "queen_of_spades2.png");
+            this.cardImgList.Images.SetKeyName(48, "king_of_clubs2.png");
+            this.cardImgList.Images.SetKeyName(49, "king_of_diamonds2.png");
+            this.cardImgList.Images.SetKeyName(50, "king_of_hearts2.png");
+            this.cardImgList.Images.SetKeyName(51, "king_of_spades2.png");
             // 
             // btnSeeAll
             // 

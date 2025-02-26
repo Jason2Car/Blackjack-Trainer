@@ -22,7 +22,7 @@ namespace Blackjack_Trainer
             suit = s;
             pic = new PictureBox();
             pic.Image = i;
-            pic.Size = new Size(20, 30); // Adjust size as needed
+            pic.Size = new Size(50, 72); // Adjust size as needed
             pic.SizeMode = PictureBoxSizeMode.StretchImage; // Ensure the image fits the PictureBox
         }
 

@@ -54,14 +54,14 @@ namespace Blackjack_Trainer
         }
         public bool stillIn() 
         {
-            return (handVal <= 21 || handValAce <= 21);
+            return (handVal <= 21 || handValAce <= 21);//either is <=21 then return true means still in, false means busted
         }
         public int getHand() 
         {
-            if (!stillIn())
+            /*if (!stillIn()) //if busted
             {
                 return -1;
-            }
+            }*/
             return (handValAce > handVal && handValAce<=21)? handValAce: handVal;
         }
 
@@ -95,13 +95,13 @@ namespace Blackjack_Trainer
             deck[hand].Add(card);
             if (card.getVal() == 1)
             {
-                handVal += 1;
-                handValAce += 11;
+                handVal = handVal + 1;
+                handValAce = handValAce + 11;
             }
             else
             {
-                handVal += card.getVal();
-                handValAce += card.getVal();
+                handVal = handVal + card.getVal();
+                handValAce = handValAce + card.getVal();
             }
             return card;
         }
@@ -113,10 +113,10 @@ namespace Blackjack_Trainer
 
         public async Task<Data> turnAsync(Game g) 
         {
-            Data ret = new Data();
+            Data ret = null;
             if (stillIn() && !stood) 
             {
-                if (!bot)
+                if (!bot) //if player
                 {
                     bool decisionMade = false;
                     while (!decisionMade)
@@ -127,7 +127,6 @@ namespace Blackjack_Trainer
                                 Card card = g.deck.Pop();
                                 ret = new Data(this, addCard(0, card), "Hit");
                                 decisionMade = true;
-                                this.addCard(0, card);
                                 MessageBox.Show("Hit");
                                 btnPressed = 0;
                                 break;
@@ -151,13 +150,12 @@ namespace Blackjack_Trainer
                 else
                 {
                     Random rand = new Random();
-                    if (dealer)
+                    if (dealer) //if dealer
                     {
-                        if (handVal < 17)
+                        if (handVal < 17 && handValAce < 17)
                         {
                             Card card = g.deck.Pop();
-                            ret = new Data(this, addCard(0, card), "Hit");
-                            this.addCard(0, card);
+                            ret = new Data(this, addCard(0, card), "Hit"); //add card to dealer's hand
                         }
                         else
                         {
@@ -165,13 +163,12 @@ namespace Blackjack_Trainer
                             stood = true;
                         }
                     }
-                    else 
+                    else //if bot
                     {
                         if (style * evalRisk(g) + handVal > 21 + diff * rand.NextDouble()) //if the player should hit
                         {
                             Card card = g.deck.Pop();
                             ret = new Data(this, addCard(0, card), "Hit");
-                            this.addCard(0, card);
                         }
                         else //if the player should stand
                         {

@@ -31,11 +31,11 @@ namespace Blackjack_Trainer
             MessageBox.Show("" + players.Last().stillIn()+" " + players.Last().hasStood());
             //Initialize cards, add one of each suit, total 52
             cards = new List<Card>();
-            for (int val = 0; val < 13; val++)
+            for (int val = 0; val <= 12; val++)
             {
                 for (int suit = 0; suit < 4; suit++) 
                 {
-                    cards.Add(new Card(val, suit, cardImgList.Images[val * 4+ suit]));
+                    cards.Add(new Card(val, suit, cardImgList.Images[val * 4 + suit]));
                 }
             }
             //need to initialize players
@@ -53,7 +53,8 @@ namespace Blackjack_Trainer
             do
             {
                 await PlayGameAsync();
-                MessageBox.Show("" + players.Last().stillIn() + " " + players.Last().hasStood());
+                MessageBox.Show("Player stillin: " + players.Last().stillIn() + " Player has Stood" + players.Last().hasStood());
+                MessageBox.Show("Player hand: " + players.Last().getHand());
                 MessageBox.Show("Game Over, Player "+findWinner()+" won");
                 // when game over show results screen
                 while (!btnSelected)
@@ -64,9 +65,13 @@ namespace Blackjack_Trainer
         }
         public async Task PlayGameAsync()
         {
-            deck = GetDeck();
+            NewDeck();
             foreach (Player cur in players) // distributing cards
             {
+                if (deck.Count<=0) 
+                {
+                    NewDeck();
+                }
                 inHands.Add(cur.addCard(0, deck.Pop()));
                 inHands.Add(cur.addCard(0, deck.Pop()));
 
@@ -75,7 +80,7 @@ namespace Blackjack_Trainer
             DisplayPlayerHand(players.Last());//client's last
             while (stillPlay())
             {
-                MessageBox.Show("made into while loop");
+                //MessageBox.Show("another round");
                 foreach (Player cur in players)
                 {
                     if (!cur.getBot())
@@ -91,19 +96,19 @@ namespace Blackjack_Trainer
                         btnSplit.Hide();
                     }
                     await cur.turnAsync(this); 
-                    if (!cur.getBot() || cur.getDealer())
+                    if (!cur.getBot() || cur.getDealer()) //if player or dealer
                     {
-                        HidePlayerHand(cur);//no need to wait since dealer has rules
-                        //MessageBox.Show("got here");
+                        HidePlayerHand(cur);//remove old hand
+                        DisplayPlayerHand(cur);//display new hand
+                        MessageBox.Show(""+cur.getHand());
                         await PauseAsync(2000);
-                        DisplayPlayerHand(cur);
 
                     }
                     else
                     {
-                        DisplayPlayerHand(cur);
+                        DisplayPlayerHand(cur); //display new hand
+                        HidePlayerHand(cur); //remove old hand
                         await PauseAsync(5000);
-                        HidePlayerHand(cur);
                     }
 
                 }
@@ -127,7 +132,7 @@ namespace Blackjack_Trainer
             deck = new Stack<Card>();
             List<Card> tempCards = new List<Card>(cards);
             Random rand = new Random();
-            for (int i = 0; i < 52; i++)
+            while (tempCards.Count>0)
             {
                 int pos = (int)(tempCards.Count * rand.NextDouble());
                 deck.Push(tempCards.ElementAt(pos));
@@ -139,7 +144,7 @@ namespace Blackjack_Trainer
 
         public Stack<Card> GetDeck()
         {
-            Stack<Card> temp = new Stack<Card>(cards);
+            Stack<Card> temp = new Stack<Card>(deck);
             return temp;
         }
 
@@ -175,7 +180,7 @@ namespace Blackjack_Trainer
 
             int xOffset; // Starting X position
             int yOffset;  // Starting Y position
-            int cardSpacing = 100; // Space between cards
+            int cardSpacing = 75; // Space between cards
             if (player.getDealer())
             {
                 xOffset = 300;
