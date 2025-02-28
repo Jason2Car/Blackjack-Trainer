@@ -36,6 +36,8 @@
             this.btnHit = new System.Windows.Forms.Button();
             this.imgTable = new System.Windows.Forms.PictureBox();
             this.btnSplit = new System.Windows.Forms.Button();
+            this.txtBxScore = new System.Windows.Forms.TextBox();
+            this.btnNewGame = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.imgTable)).BeginInit();
             this.SuspendLayout();
             // 
@@ -104,6 +106,7 @@
             this.btnSeeAll.TabIndex = 0;
             this.btnSeeAll.Text = "See All Hands";
             this.btnSeeAll.UseVisualStyleBackColor = true;
+            this.btnSeeAll.Click += new System.EventHandler(this.btnSeeAll_Click);
             // 
             // btnStand
             // 
@@ -145,12 +148,33 @@
             this.btnSplit.UseVisualStyleBackColor = true;
             this.btnSplit.Click += new System.EventHandler(this.btnSplit_Click);
             // 
+            // txtBxScore
+            // 
+            this.txtBxScore.Enabled = false;
+            this.txtBxScore.Location = new System.Drawing.Point(667, 389);
+            this.txtBxScore.Name = "txtBxScore";
+            this.txtBxScore.Size = new System.Drawing.Size(100, 20);
+            this.txtBxScore.TabIndex = 5;
+            // 
+            // btnNewGame
+            // 
+            this.btnNewGame.Location = new System.Drawing.Point(294, 386);
+            this.btnNewGame.Name = "btnNewGame";
+            this.btnNewGame.Size = new System.Drawing.Size(75, 23);
+            this.btnNewGame.TabIndex = 6;
+            this.btnNewGame.Text = "New Game";
+            this.btnNewGame.UseVisualStyleBackColor = true;
+            this.btnNewGame.Visible = false;
+            this.btnNewGame.Click += new System.EventHandler(this.btnNewGame_Click);
+            // 
             // Game
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.WindowFrame;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnNewGame);
+            this.Controls.Add(this.txtBxScore);
             this.Controls.Add(this.btnSplit);
             this.Controls.Add(this.btnHit);
             this.Controls.Add(this.btnStand);
@@ -160,6 +184,7 @@
             this.Text = "Blackjack Trainer";
             ((System.ComponentModel.ISupportInitialize)(this.imgTable)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -171,5 +196,7 @@
         private System.Windows.Forms.Button btnHit;
         private System.Windows.Forms.PictureBox imgTable;
         private System.Windows.Forms.Button btnSplit;
+        private System.Windows.Forms.TextBox txtBxScore;
+        private System.Windows.Forms.Button btnNewGame;
     }
 }
