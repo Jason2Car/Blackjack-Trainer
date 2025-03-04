@@ -95,14 +95,15 @@ namespace Blackjack_Trainer
             deck[hand].Add(card);
             if (card.getVal() == 1)
             {
-                handVal = handVal + 1;
-                handValAce = handValAce + 11;
+                handVal += 1;
+                handValAce += 11;
             }
             else
             {
-                handVal = handVal + card.getVal();
-                handValAce = handValAce + card.getVal();
+                handVal += card.getVal();
+                handValAce += card.getVal();
             }
+            //MessageBox.Show("Card added: " + card.getVal());
             return card;
         }
 
@@ -179,6 +180,15 @@ namespace Blackjack_Trainer
                 }
             }
             return ret;
+        }
+
+        public void clearHand() 
+        {
+            deck.Clear();
+            deck.Add(new List<Card>());
+            handVal = 0;
+            handValAce = 0;
+            stood = false;
         }
         public void press(int selected) 
         {

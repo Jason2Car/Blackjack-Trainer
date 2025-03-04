@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,7 +29,7 @@ namespace Blackjack_Trainer
         {
             InitializeComponent();
             players = p;
-            MessageBox.Show("" + players.Last().stillIn()+" " + players.Last().hasStood());
+            //MessageBox.Show("" + players.Last().stillIn()+" " + players.Last().hasStood());
             //Initialize cards, add one of each suit, total 52
             cards = new List<Card>();
             for (int val = 1; val <= 13; val++)
@@ -49,23 +50,20 @@ namespace Blackjack_Trainer
         }
         private async Task StartGameAsync()
         {
-            bool newGame = false;
-            do
+            await PlayGameAsync();
+            MessageBox.Show("Player stillin: " + players.Last().stillIn() + " Player has Stood" + players.Last().hasStood());
+            MessageBox.Show("Player hand: " + players.Last().getHand());
+            MessageBox.Show("Game Over, Player "+findWinner()+" won");
+            // when game over show results screen
+            while (!btnSelected)
             {
-                await PlayGameAsync();
-                MessageBox.Show("Player stillin: " + players.Last().stillIn() + " Player has Stood" + players.Last().hasStood());
-                MessageBox.Show("Player hand: " + players.Last().getHand());
-                MessageBox.Show("Game Over, Player "+findWinner()+" won");
-                // when game over show results screen
-                while (!btnSelected)
-                {
-                    await Task.Delay(100); // Avoid blocking the UI thread
-                }
-            } while (newGame);
+                await Task.Delay(100); // Avoid blocking the UI thread
+            }
         }
         public async Task PlayGameAsync()
         {
             NewDeck();
+            await PauseAsync(3000);
             foreach (Player cur in players) // distributing cards
             {
                 if (deck.Count<=0) 
@@ -80,6 +78,7 @@ namespace Blackjack_Trainer
             DisplayPlayerHand(players.Last());//client's last
             while (stillPlay())
             {
+                txtBxScore.Text = "Score: " + players.Last().getHand();
                 //MessageBox.Show("another round");
                 foreach (Player cur in players)
                 {
@@ -95,6 +94,7 @@ namespace Blackjack_Trainer
                     btnSplit.Hide();
                     if (!cur.getBot() || cur.getDealer()) //if player or dealer
                     {
+                        //txtBxScore.Text = "Score: " + cur.getHand();
                         HidePlayerHand(cur);//remove old hand
                         DisplayPlayerHand(cur);//display new hand
                         MessageBox.Show(cur.getBot()+" Hand: "+cur.getHand());
@@ -110,6 +110,7 @@ namespace Blackjack_Trainer
 
                 }
             }
+            btnNewGame.Show();
         }
 
         public bool stillPlay()
@@ -161,7 +162,7 @@ namespace Blackjack_Trainer
             int winner = 0;
             for (int i = 0; i < players.Count; i++)
             {
-                if (players[i].getHand() > max)
+                if (players[i].getHand() > max) //if player ties with dealer, still dealer wins, winner doesn't update
                 {
                     max = players[i].getHand();
                     winner = i;
@@ -238,6 +239,23 @@ namespace Blackjack_Trainer
         {
             await Task.Delay(milliseconds);
             // Code to execute after the delay
+        }
+
+        private async void btnNewGame_Click(object sender, EventArgs e)
+        {
+            btnNewGame.Hide();
+            foreach (Player i in players)
+            {
+                HidePlayerHand(i);
+                i.clearHand();
+            }
+            txtBxScore.Text = "Score: ";
+            await InitializeGameAsync();
+        }
+
+        private void btnSeeAll_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
