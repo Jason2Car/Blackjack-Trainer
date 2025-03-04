@@ -31,11 +31,11 @@ namespace Blackjack_Trainer
             MessageBox.Show("" + players.Last().stillIn()+" " + players.Last().hasStood());
             //Initialize cards, add one of each suit, total 52
             cards = new List<Card>();
-            for (int val = 0; val <= 12; val++)
+            for (int val = 1; val <= 13; val++)
             {
                 for (int suit = 0; suit < 4; suit++) 
                 {
-                    cards.Add(new Card(val, suit, cardImgList.Images[val * 4 + suit]));
+                    cards.Add(new Card(Math.Min(val, 10), suit, cardImgList.Images[(val-1) * 4 + suit]));
                 }
             }
             //need to initialize players
@@ -89,18 +89,15 @@ namespace Blackjack_Trainer
                         btnStand.Show();
                         btnSplit.Show();
                     }
-                    else
-                    {
-                        btnHit.Hide();
-                        btnStand.Hide();
-                        btnSplit.Hide();
-                    }
-                    await cur.turnAsync(this); 
+                    await cur.turnAsync(this);
+                    btnHit.Hide();
+                    btnStand.Hide();
+                    btnSplit.Hide();
                     if (!cur.getBot() || cur.getDealer()) //if player or dealer
                     {
                         HidePlayerHand(cur);//remove old hand
                         DisplayPlayerHand(cur);//display new hand
-                        MessageBox.Show(""+cur.getHand());
+                        MessageBox.Show(cur.getBot()+" Hand: "+cur.getHand());
                         await PauseAsync(2000);
 
                     }
