@@ -36,8 +36,12 @@
             this.btnHit = new System.Windows.Forms.Button();
             this.imgTable = new System.Windows.Forms.PictureBox();
             this.btnSplit = new System.Windows.Forms.Button();
-            this.txtBxScore = new System.Windows.Forms.TextBox();
+            this.txtBxScorePlayer = new System.Windows.Forms.TextBox();
             this.btnNewGame = new System.Windows.Forms.Button();
+            this.btnNewSettings = new System.Windows.Forms.Button();
+            this.btnReview = new System.Windows.Forms.Button();
+            this.txtBxScoreBot = new System.Windows.Forms.TextBox();
+            this.txtBxHasStood = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.imgTable)).BeginInit();
             this.SuspendLayout();
             // 
@@ -148,13 +152,13 @@
             this.btnSplit.UseVisualStyleBackColor = true;
             this.btnSplit.Click += new System.EventHandler(this.btnSplit_Click);
             // 
-            // txtBxScore
+            // txtBxScorePlayer
             // 
-            this.txtBxScore.Enabled = false;
-            this.txtBxScore.Location = new System.Drawing.Point(667, 389);
-            this.txtBxScore.Name = "txtBxScore";
-            this.txtBxScore.Size = new System.Drawing.Size(100, 20);
-            this.txtBxScore.TabIndex = 5;
+            this.txtBxScorePlayer.Enabled = false;
+            this.txtBxScorePlayer.Location = new System.Drawing.Point(667, 389);
+            this.txtBxScorePlayer.Name = "txtBxScorePlayer";
+            this.txtBxScorePlayer.Size = new System.Drawing.Size(100, 20);
+            this.txtBxScorePlayer.TabIndex = 5;
             // 
             // btnNewGame
             // 
@@ -167,14 +171,56 @@
             this.btnNewGame.Visible = false;
             this.btnNewGame.Click += new System.EventHandler(this.btnNewGame_Click);
             // 
+            // btnNewSettings
+            // 
+            this.btnNewSettings.Location = new System.Drawing.Point(454, 386);
+            this.btnNewSettings.Name = "btnNewSettings";
+            this.btnNewSettings.Size = new System.Drawing.Size(78, 23);
+            this.btnNewSettings.TabIndex = 7;
+            this.btnNewSettings.Text = "New Settings";
+            this.btnNewSettings.UseVisualStyleBackColor = true;
+            this.btnNewSettings.Visible = false;
+            this.btnNewSettings.Click += new System.EventHandler(this.btnNewSettings_Click);
+            // 
+            // btnReview
+            // 
+            this.btnReview.Location = new System.Drawing.Point(373, 325);
+            this.btnReview.Name = "btnReview";
+            this.btnReview.Size = new System.Drawing.Size(75, 23);
+            this.btnReview.TabIndex = 8;
+            this.btnReview.Text = "Review";
+            this.btnReview.UseVisualStyleBackColor = true;
+            this.btnReview.Visible = false;
+            this.btnReview.Click += new System.EventHandler(this.btnReview_Click);
+            // 
+            // txtBxScoreBot
+            // 
+            this.txtBxScoreBot.Enabled = false;
+            this.txtBxScoreBot.Location = new System.Drawing.Point(39, 377);
+            this.txtBxScoreBot.Name = "txtBxScoreBot";
+            this.txtBxScoreBot.Size = new System.Drawing.Size(100, 20);
+            this.txtBxScoreBot.TabIndex = 9;
+            // 
+            // txtBxHasStood
+            // 
+            this.txtBxHasStood.Location = new System.Drawing.Point(39, 403);
+            this.txtBxHasStood.Name = "txtBxHasStood";
+            this.txtBxHasStood.Size = new System.Drawing.Size(100, 20);
+            this.txtBxHasStood.TabIndex = 10;
+            this.txtBxHasStood.Text = "Has Stood: ";
+            // 
             // Game
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.WindowFrame;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.txtBxHasStood);
+            this.Controls.Add(this.txtBxScoreBot);
+            this.Controls.Add(this.btnReview);
+            this.Controls.Add(this.btnNewSettings);
             this.Controls.Add(this.btnNewGame);
-            this.Controls.Add(this.txtBxScore);
+            this.Controls.Add(this.txtBxScorePlayer);
             this.Controls.Add(this.btnSplit);
             this.Controls.Add(this.btnHit);
             this.Controls.Add(this.btnStand);
@@ -196,7 +242,11 @@
         private System.Windows.Forms.Button btnHit;
         private System.Windows.Forms.PictureBox imgTable;
         private System.Windows.Forms.Button btnSplit;
-        private System.Windows.Forms.TextBox txtBxScore;
+        private System.Windows.Forms.TextBox txtBxScorePlayer;
         private System.Windows.Forms.Button btnNewGame;
+        private System.Windows.Forms.Button btnNewSettings;
+        private System.Windows.Forms.Button btnReview;
+        private System.Windows.Forms.TextBox txtBxScoreBot;
+        private System.Windows.Forms.TextBox txtBxHasStood;
     }
 }

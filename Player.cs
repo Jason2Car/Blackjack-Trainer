@@ -166,7 +166,7 @@ namespace Blackjack_Trainer
                     }
                     else //if bot
                     {
-                        if (style * evalRisk(g) + handVal > 21 + diff * rand.NextDouble()) //if the player should hit
+                        if (evalRisk(g) + handVal <= 21 + diff * rand.NextDouble()) //if the player should hit
                         {
                             Card card = g.deck.Pop();
                             ret = new Data(this, addCard(0, card), "Hit");

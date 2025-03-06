@@ -50,20 +50,35 @@ namespace Blackjack_Trainer
         }
         private async Task StartGameAsync()
         {
-            await PlayGameAsync();
-            MessageBox.Show("Player stillin: " + players.Last().stillIn() + " Player has Stood" + players.Last().hasStood());
-            MessageBox.Show("Player hand: " + players.Last().getHand());
-            MessageBox.Show("Game Over, Player "+findWinner()+" won");
-            // when game over show results screen
-            while (!btnSelected)
+            if (players.Count == 2) 
             {
-                await Task.Delay(100); // Avoid blocking the UI thread
+                txtBxScoreBot.Hide();
+                txtBxHasStood.Hide();
             }
+            await PlayGameAsync();
+            //MessageBox.Show("Player stillin: " + players.Last().stillIn() + " Player has Stood" + players.Last().hasStood());
+            //MessageBox.Show("Player hand: " + players.Last().getHand());
+            int winner = findWinner();
+            if (winner == players.Count - 1)
+            {
+                MessageBox.Show("Game Over. You won");
+
+            }
+            else if (winner == 0)
+            {
+                MessageBox.Show("Game Over. Dealer won");
+            }
+            else
+            {
+                MessageBox.Show("Game Over. Bot " + winner + " won");
+
+            }
+            
         }
         public async Task PlayGameAsync()
         {
             NewDeck();
-            await PauseAsync(3000);
+            //await PauseAsync(1000);
             foreach (Player cur in players) // distributing cards
             {
                 if (deck.Count<=0) 
@@ -78,15 +93,20 @@ namespace Blackjack_Trainer
             DisplayPlayerHand(players.Last());//client's last
             while (stillPlay())
             {
-                txtBxScore.Text = "Score: " + players.Last().getHand();
+                txtBxScorePlayer.Text = "Score: " + players.Last().getHand();
                 //MessageBox.Show("another round");
                 foreach (Player cur in players)
                 {
+                    DisplayPlayerHand(cur);
                     if (!cur.getBot())
                     {
                         btnHit.Show();
                         btnStand.Show();
                         btnSplit.Show();
+                    }
+                    else 
+                    {
+                        await PauseAsync(2000);
                     }
                     await cur.turnAsync(this);
                     btnHit.Hide();
@@ -97,20 +117,22 @@ namespace Blackjack_Trainer
                         //txtBxScore.Text = "Score: " + cur.getHand();
                         HidePlayerHand(cur);//remove old hand
                         DisplayPlayerHand(cur);//display new hand
-                        MessageBox.Show(cur.getBot()+" Hand: "+cur.getHand());
-                        await PauseAsync(2000);
+                        //MessageBox.Show(cur.getBot()+" Hand: "+cur.getHand());
+                        await PauseAsync(1000);
 
                     }
                     else
                     {
                         DisplayPlayerHand(cur); //display new hand
+                        await PauseAsync(2000);
                         HidePlayerHand(cur); //remove old hand
-                        await PauseAsync(5000);
                     }
 
                 }
             }
             btnNewGame.Show();
+            btnNewSettings.Show();
+            btnReview.Show();
         }
 
         public bool stillPlay()
@@ -136,7 +158,7 @@ namespace Blackjack_Trainer
                 deck.Push(tempCards.ElementAt(pos));
                 tempCards.RemoveAt(pos);
             }
-            MessageBox.Show("New deck added");
+            //MessageBox.Show("New deck added");
             return deck;
         }
 
@@ -162,7 +184,7 @@ namespace Blackjack_Trainer
             int winner = 0;
             for (int i = 0; i < players.Count; i++)
             {
-                if (players[i].getHand() > max) //if player ties with dealer, still dealer wins, winner doesn't update
+                if (players[i].stillIn() && players[i].getHand() > max) //if player ties with dealer, still dealer wins, winner doesn't update
                 {
                     max = players[i].getHand();
                     winner = i;
@@ -197,6 +219,12 @@ namespace Blackjack_Trainer
             }
             //if the bot, then use this to show cards
 
+            if (player.getBot() && !player.getDealer())
+            {
+                txtBxScoreBot.Text = "Score: " + player.getHand();
+                txtBxHasStood.Text = "Has Stood: " + player.hasStood();
+                //await PauseAsync(1000);
+            }
 
             foreach (List<Card> hand in player.getDeck())
             {
@@ -219,6 +247,9 @@ namespace Blackjack_Trainer
                     this.Controls.Remove(card.getPictureBox());
                     //card.getPictureBox().Dispose();
                 }
+            txtBxScoreBot.Text = "Score: " ;
+            txtBxHasStood.Text = "Has Stood: ";
+
         }
         private void btnHit_Click(object sender, EventArgs e)
         {
@@ -244,18 +275,37 @@ namespace Blackjack_Trainer
         private async void btnNewGame_Click(object sender, EventArgs e)
         {
             btnNewGame.Hide();
+            btnNewSettings.Hide();
+            btnReview.Hide();
             foreach (Player i in players)
             {
                 HidePlayerHand(i);
                 i.clearHand();
             }
-            txtBxScore.Text = "Score: ";
+            txtBxScorePlayer.Text = "Score: ";
             await InitializeGameAsync();
         }
 
         private void btnSeeAll_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnNewSettings_Click(object sender, EventArgs e)
+        {
+            btnNewSettings.Hide();
+            Start start = new Start();
+            this.Hide(); // Hide the Start form
+            start.Show(); // Show the Game form
+        }
+
+        private void btnReview_Click(object sender, EventArgs e)
+        {
+
+            btnReview.Hide();
+            GameReview review= new GameReview(data);
+            this.Hide(); // Hide the Start form
+            review.Show(); // Show the Game form
         }
     }
 }
