@@ -25,6 +25,13 @@ namespace Blackjack_Trainer
             pic.Size = new Size(50, 72); // Adjust size as needed
             pic.SizeMode = PictureBoxSizeMode.StretchImage; // Ensure the image fits the PictureBox
         }
+        enum Suits
+        {
+            Clubs = 0,
+            Diamonds = 1,
+            Hearts = 2,
+            Spades = 3
+        }
 
         public int getVal()
         {
@@ -33,6 +40,10 @@ namespace Blackjack_Trainer
         public int getSuit()
         {
             return suit;
+        }
+        public String getSuitString()
+        {
+            return Enum.GetName(typeof(Suits), suit);
         }
         public PictureBox getPictureBox()
         {

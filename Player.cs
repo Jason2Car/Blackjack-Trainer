@@ -126,13 +126,13 @@ namespace Blackjack_Trainer
                         {
                             case 1:
                                 Card card = g.deck.Pop();
-                                ret = new Data(this, addCard(0, card), "Hit");
+                                ret = new Data(this, addCard(0, card), btnPressed);
                                 decisionMade = true;
                                 MessageBox.Show("Hit");
                                 btnPressed = 0;
                                 break;
                             case 2:
-                                ret = new Data(this, null, "Stand");
+                                ret = new Data(this, null, btnPressed);
                                 decisionMade = true;
                                 stood = true;
                                 MessageBox.Show("Stand");
@@ -156,11 +156,11 @@ namespace Blackjack_Trainer
                         if (handVal < 17 && handValAce < 17)
                         {
                             Card card = g.deck.Pop();
-                            ret = new Data(this, addCard(0, card), "Hit"); //add card to dealer's hand
+                            ret = new Data(this, addCard(0, card), 1); //add card to dealer's hand
                         }
                         else
                         {
-                            ret = new Data(this, null, "Stand");
+                            ret = new Data(this, null, 2);
                             stood = true;
                         }
                     }
@@ -169,11 +169,11 @@ namespace Blackjack_Trainer
                         if (evalRisk(g) + handVal <= 21 + diff * rand.NextDouble()) //if the player should hit
                         {
                             Card card = g.deck.Pop();
-                            ret = new Data(this, addCard(0, card), "Hit");
+                            ret = new Data(this, addCard(0, card), 1);
                         }
                         else //if the player should stand
                         {
-                            ret = new Data(this, null, "Stand");
+                            ret = new Data(this, null, 2);
                             stood = true;
                         }
                     }

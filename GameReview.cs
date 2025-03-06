@@ -12,11 +12,24 @@ namespace Blackjack_Trainer
 {
     public partial class GameReview : Form
     {
-        public GameReview(List<Data> data)
+        List<Data> data;
+        int players;
+        public GameReview(List<Data> d, int p)
         {
             InitializeComponent();
+            data = d;
+            players = p;
         }
 
-
+        public void Review()
+        {
+            
+        }
+        public void DisplayData(int turn) {
+            foreach (Data d in data)
+            {
+                listBoxData.Items.Add(d.ToString());
+            }
+        }
     }
 }

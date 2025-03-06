@@ -24,7 +24,7 @@ namespace Blackjack_Trainer
         private List<int> winings = new List<int>();
         private List<Data> data = new List<Data>();
 
-        private bool btnSelected = false;
+        //private bool btnSelected = false;
         public Game(List<Player> p)
         {
             InitializeComponent();
@@ -108,7 +108,10 @@ namespace Blackjack_Trainer
                     {
                         await PauseAsync(2000);
                     }
-                    await cur.turnAsync(this);
+
+                    Data result = await cur.turnAsync(this);
+                    data.Add(result);
+
                     btnHit.Hide();
                     btnStand.Hide();
                     btnSplit.Hide();
@@ -303,7 +306,7 @@ namespace Blackjack_Trainer
         {
 
             btnReview.Hide();
-            GameReview review= new GameReview(data);
+            GameReview review= new GameReview(data, players.Count);
             this.Hide(); // Hide the Start form
             review.Show(); // Show the Game form
         }

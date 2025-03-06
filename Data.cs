@@ -10,9 +10,9 @@ namespace Blackjack_Trainer
     {
         private Player player;
         private Card card;
-        private String action;
+        private int action; //hit, stand, split
         public Data() { }
-        public Data(Player p, Card c, String a) 
+        public Data(Player p, Card c, int a) 
         {
             player = p;
             card = c;
@@ -23,13 +23,23 @@ namespace Blackjack_Trainer
         public string ToString()
         {
             string ret = "";
-            if (action.Equals("stand"))
+            switch (action)
             {
-                ret = "" + player.getBot() + "Stand";
-            }
-            else 
-            {
-                ret = ""+player.getBot()+action+card.getSuit()+card.getVal();
+                case 0:
+                    ret = "Stand";
+                    break;
+                case 1:
+                    ret = "Hit " + card.getSuit() +" "+ card.getVal();
+                    break;
+                case 2:
+                    ret = "Split";
+                    break;
+                case 3:
+                    ret = "Draw";
+                    break;
+                default:
+                    ret = "Error";
+                    break;
             }
             return ret;
         }
