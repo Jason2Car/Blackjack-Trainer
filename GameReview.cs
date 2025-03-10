@@ -25,10 +25,10 @@ namespace Blackjack_Trainer
         {
             
         }
-        public void DisplayData(int turn) {
-            foreach (Data d in data)
+        public void DisplayTurn(int turn) {
+            for (int i = 0; i < players; i++) 
             {
-                listBoxData.Items.Add(d.ToString());
+            
             }
         }
     }
