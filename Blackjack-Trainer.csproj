@@ -47,7 +47,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Card.cs" />
+    <Compile Include="Client.cs" />
+    <Compile Include="ComputerControlledPlayer.cs" />
     <Compile Include="Data.cs" />
+    <Compile Include="Dealer.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Start.cs">
       <SubType>Form</SubType>

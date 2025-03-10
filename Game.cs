@@ -98,7 +98,7 @@ namespace Blackjack_Trainer
                 foreach (Player cur in players)
                 {
                     DisplayPlayerHand(cur);
-                    if (!cur.GetBot())
+                    if (!cur.IsComputer())
                     {
                         btnHit.Show();
                         btnStand.Show();
@@ -115,7 +115,7 @@ namespace Blackjack_Trainer
                     btnHit.Hide();
                     btnStand.Hide();
                     btnSplit.Hide();
-                    if (!cur.GetBot() || cur.GetDealer()) //if player or dealer
+                    if (!cur.IsComputer() || cur.IsDealer()) //if player or dealer
                     {
                         //txtBxScore.Text = "Score: " + cur.getHand();
                         HidePlayerHand(cur);//remove old hand
@@ -204,13 +204,13 @@ namespace Blackjack_Trainer
             int xOffset; // Starting X position
             int yOffset;  // Starting Y position
             int cardSpacing = 75; // Space between cards
-            if (player.GetDealer())
+            if (player.IsDealer())
             {
                 xOffset = 300;
                 yOffset = 100;
                 //MessageBox.Show("Dealer hand size: "+player.getDeck()[0].Count);
             }
-            else if (!player.GetBot())
+            else if (!player.IsComputer())
             {
                 xOffset = 500;
                 yOffset = 300;
@@ -222,7 +222,7 @@ namespace Blackjack_Trainer
             }
             //if the bot, then use this to show cards
 
-            if (player.GetBot() && !player.GetDealer())
+            if (player.IsComputer() && !player.IsComputer())
             {
                 txtBxScoreBot.Text = "Score: " + player.GetHand();
                 txtBxHasStood.Text = "Has Stood: " + player.HasStood();

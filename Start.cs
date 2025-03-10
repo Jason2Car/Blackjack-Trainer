@@ -42,8 +42,8 @@ namespace Blackjack_Trainer
         {
             int numPlayers = Convert.ToInt32(numUDNumPlayer.Value);
             List<Player> playing = new List<Player>();
-            Player client = new Player();
-            Player dealer = new Player(-1,-1,true);
+            Player client = new Client();
+            Player dealer = new Dealer();
             playing.Add(dealer);
             bool misinput = false;
             foreach (Panel p in players) 
@@ -88,7 +88,7 @@ namespace Blackjack_Trainer
                         }
                     }
                 }
-                playing.Add(new Player(diff, play, false));
+                playing.Add(new ComputerControlledPlayer(diff, play));
             }
             playing.Add(client);
             if (misinput)
