@@ -58,7 +58,7 @@ namespace Blackjack_Trainer
             await PlayGameAsync();
             //MessageBox.Show("Player stillin: " + players.Last().stillIn() + " Player has Stood" + players.Last().hasStood());
             //MessageBox.Show("Player hand: " + players.Last().getHand());
-            int winner = findWinner();
+            int winner = FindWinner();
             if (winner == players.Count - 1)
             {
                 MessageBox.Show("Game Over. You won");
@@ -85,20 +85,20 @@ namespace Blackjack_Trainer
                 {
                     NewDeck();
                 }
-                inHands.Add(cur.addCard(0, deck.Pop()));
-                inHands.Add(cur.addCard(0, deck.Pop()));
+                inHands.Add(cur.AddCard(0, deck.Pop()));
+                inHands.Add(cur.AddCard(0, deck.Pop()));
 
             }
             DisplayPlayerHand(players.First());//dealer's first
             DisplayPlayerHand(players.Last());//client's last
-            while (stillPlay())
+            while (StillPlay())
             {
-                txtBxScorePlayer.Text = "Score: " + players.Last().getHand();
+                txtBxScorePlayer.Text = "Score: " + players.Last().GetHand();
                 //MessageBox.Show("another round");
                 foreach (Player cur in players)
                 {
                     DisplayPlayerHand(cur);
-                    if (!cur.getBot())
+                    if (!cur.GetBot())
                     {
                         btnHit.Show();
                         btnStand.Show();
@@ -109,13 +109,13 @@ namespace Blackjack_Trainer
                         await PauseAsync(2000);
                     }
 
-                    Data result = await cur.turnAsync(this);
+                    Data result = await cur.TurnAsync(this);
                     data.Add(result);
 
                     btnHit.Hide();
                     btnStand.Hide();
                     btnSplit.Hide();
-                    if (!cur.getBot() || cur.getDealer()) //if player or dealer
+                    if (!cur.GetBot() || cur.GetDealer()) //if player or dealer
                     {
                         //txtBxScore.Text = "Score: " + cur.getHand();
                         HidePlayerHand(cur);//remove old hand
@@ -138,11 +138,11 @@ namespace Blackjack_Trainer
             btnReview.Show();
         }
 
-        public bool stillPlay()
+        public bool StillPlay()
         {
             foreach (Player i in players) 
             { 
-                if (i.stillIn() && !i.hasStood()) 
+                if (i.StillIn() && !i.HasStood()) 
                 { 
                     return true; 
                 }
@@ -171,25 +171,25 @@ namespace Blackjack_Trainer
             return temp;
         }
 
-        public int handSum() 
+        public int HandSum() 
         {
             int sum = 0;
             foreach(Card i in inHands)
             {
-                sum = sum + i.getVal();            
+                sum = sum + i.GetVal();            
             }
             return sum;
         }
 
-        public int findWinner() 
+        public int FindWinner() 
         {
             int max = 0;
             int winner = 0;
             for (int i = 0; i < players.Count; i++)
             {
-                if (players[i].stillIn() && players[i].getHand() > max) //if player ties with dealer, still dealer wins, winner doesn't update
+                if (players[i].StillIn() && players[i].GetHand() > max) //if player ties with dealer, still dealer wins, winner doesn't update
                 {
-                    max = players[i].getHand();
+                    max = players[i].GetHand();
                     winner = i;
                 }
             }
@@ -204,13 +204,13 @@ namespace Blackjack_Trainer
             int xOffset; // Starting X position
             int yOffset;  // Starting Y position
             int cardSpacing = 75; // Space between cards
-            if (player.getDealer())
+            if (player.GetDealer())
             {
                 xOffset = 300;
                 yOffset = 100;
                 //MessageBox.Show("Dealer hand size: "+player.getDeck()[0].Count);
             }
-            else if (!player.getBot())
+            else if (!player.GetBot())
             {
                 xOffset = 500;
                 yOffset = 300;
@@ -222,18 +222,18 @@ namespace Blackjack_Trainer
             }
             //if the bot, then use this to show cards
 
-            if (player.getBot() && !player.getDealer())
+            if (player.GetBot() && !player.GetDealer())
             {
-                txtBxScoreBot.Text = "Score: " + player.getHand();
-                txtBxHasStood.Text = "Has Stood: " + player.hasStood();
+                txtBxScoreBot.Text = "Score: " + player.GetHand();
+                txtBxHasStood.Text = "Has Stood: " + player.HasStood();
                 //await PauseAsync(1000);
             }
 
-            foreach (List<Card> hand in player.getDeck())
+            foreach (List<Card> hand in player.GetDeck())
             {
                 for (int i = 0; i < hand.Count; i++)
                 {
-                    PictureBox pic = hand[i].getPictureBox();
+                    PictureBox pic = hand[i].GetPictureBox();
                     pic.Location = new Point(xOffset + (i * cardSpacing), yOffset);
                     this.Controls.Add(pic);
                     pic.BringToFront();
@@ -243,11 +243,11 @@ namespace Blackjack_Trainer
 
         private void HidePlayerHand(Player player)
         {
-            foreach (List<Card> hand in player.getDeck())
+            foreach (List<Card> hand in player.GetDeck())
                 foreach (Card card in hand)
                 {
 
-                    this.Controls.Remove(card.getPictureBox());
+                    this.Controls.Remove(card.GetPictureBox());
                     //card.getPictureBox().Dispose();
                 }
             txtBxScoreBot.Text = "Score: " ;
@@ -256,18 +256,18 @@ namespace Blackjack_Trainer
         }
         private void btnHit_Click(object sender, EventArgs e)
         {
-            players[players.Count - 1].press(1);
+            players[players.Count - 1].Press(1);
         }
 
         private void btnStand_Click(object sender, EventArgs e)
         {
-            players[players.Count - 1].press(2);
+            players[players.Count - 1].Press(2);
         }
 
 
         private void btnSplit_Click(object sender, EventArgs e)
         {
-            players[players.Count - 1].press(3);
+            players[players.Count - 1].Press(3);
         }
         public async Task PauseAsync(int milliseconds)
         {
@@ -283,7 +283,7 @@ namespace Blackjack_Trainer
             foreach (Player i in players)
             {
                 HidePlayerHand(i);
-                i.clearHand();
+                i.ClearHand();
             }
             txtBxScorePlayer.Text = "Score: ";
             await InitializeGameAsync();
@@ -309,6 +309,28 @@ namespace Blackjack_Trainer
             GameReview review= new GameReview(data, players.Count);
             this.Hide(); // Hide the Start form
             review.Show(); // Show the Game form
+        }
+        private List<Player> SortWinners()
+        {
+
+            List<Player> ret = new List<Player>(players);
+            int n = players.Count;
+            for (int i = 0; i < n - 1; i++)
+            {
+                int minIndex = i;
+                for (int j = i + 1; j < n; j++)
+                {
+                    if (ret[j].GetWinnings() < ret[minIndex].GetWinnings())
+                    {
+                        minIndex = j;
+                    }
+                }
+                // Swap the found minimum element with the first element
+                Player temp = ret[minIndex];
+                ret[minIndex] = ret[i];
+                ret[i] = temp;
+            }
+            return ret;
         }
     }
 }

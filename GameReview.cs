@@ -28,7 +28,7 @@ namespace Blackjack_Trainer
         public void DisplayData(int turn) {
             foreach (Data d in data)
             {
-                listBoxData.Items.Add(d.ToString());
+                MessageBox.Show(d.ToString());
             }
         }
     }

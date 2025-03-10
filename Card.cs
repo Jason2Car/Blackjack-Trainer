@@ -33,19 +33,19 @@ namespace Blackjack_Trainer
             Spades = 3
         }
 
-        public int getVal()
+        public int GetVal()
         {
             return val;
         }
-        public int getSuit()
+        public int GetSuit()
         {
             return suit;
         }
-        public String getSuitString()
+        public String GetSuitString()
         {
             return Enum.GetName(typeof(Suits), suit);
         }
-        public PictureBox getPictureBox()
+        public PictureBox GetPictureBox()
         {
             return pic;
         }
