@@ -29,7 +29,7 @@ namespace Blackjack_Trainer
                     ret = "Stand";
                     break;
                 case 1:
-                    ret = "Hit " + card.getSuit() +" "+ card.getVal();
+                    ret = "Hit " + card.GetSuit() +" "+ card.GetVal();
                     break;
                 case 2:
                     ret = "Split";

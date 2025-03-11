@@ -17,7 +17,7 @@ namespace Blackjack_Trainer
         public GameReview(List<Data> d, int p)
         {
             InitializeComponent();
-            data = d;
+            data = d; 
             players = p;
         }
 
@@ -28,7 +28,7 @@ namespace Blackjack_Trainer
         public void DisplayTurn(int turn) {
             for (int i = 0; i < players; i++) 
             {
-            
+                MessageBox.Show(d.ToString());
             }
         }
     }

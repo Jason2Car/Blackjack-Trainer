@@ -8,55 +8,52 @@ using System.Windows.Forms;
 
 namespace Blackjack_Trainer
 {
-    public class Player
+    public abstract class Player
     {
-        
-        private int diff;
-        private float style;
-        private List<List<Card>> deck = new List<List<Card>>();
-        private int handVal=0;
-        private int handValAce=0;
-        private int[] decision = new int[] { 1, 2, 3, 5, 7, 11, 13 };
-        private bool bot;
-        private bool dealer;
-        private int btnPressed = 0;
-        private bool stood = false;
-        public Player() 
+
+        protected int diff;
+        protected float style;
+        protected List<List<Card>> deck = new List<List<Card>>();
+        protected int handVal = 0;
+        protected int handValAce = 0;
+        protected int[] decision = new int[] { 1, 2, 3, 5, 7, 11, 13 };
+        protected int btnPressed = 0;
+        protected int winnings = 1000;
+        protected int bet = 0;
+        protected bool stood = false;
+        protected bool isComputerControlled = false;
+        protected bool isDealer = false;
+        public Player(int d, float s)
         {
-            dealer = false;
-            bot = false;
             deck.Add(new List<Card>());
-        }
-        public Player(int d, int s, bool deal) { 
             diff = d;
             style = s;
-            dealer = deal;
-            bot = true;
-            deck.Add(new List<Card>());
         }
+        
 
-        public int getDifficulty()
+        public int GetDifficulty()
         {
             return diff;
         }
-        public float getStyle()
+        public float GetStyle()
         {
             return style;
         }
-        public bool getBot()
-        {
-            return bot;
-        }
 
-        public bool getDealer()
-        {
-            return dealer;
-        }
-        public bool stillIn() 
+        public bool StillIn() 
         {
             return (handVal <= 21 || handValAce <= 21);//either is <=21 then return true means still in, false means busted
         }
-        public int getHand() 
+        public int GetWinnings() 
+        {
+            return winnings;
+        }
+
+        public int GetButtonPressed() 
+        {
+            return btnPressed;
+        }
+        public int GetHand() 
         {
             /*if (!stillIn()) //if busted
             {
@@ -64,23 +61,34 @@ namespace Blackjack_Trainer
             }*/
             return (handValAce > handVal && handValAce<=21)? handValAce: handVal;
         }
+        
+        public bool IsComputer() {
+            return isComputerControlled;
+        }
+        public bool IsDealer() {
+            return isDealer;
+        }
 
-        public bool hasStood() 
+        public bool HasStood() 
         {
             return stood;
         }
+        public void SetStood(bool s) 
+        {
+            stood = s;
+        }
 
-        public int evalRisk(Game g) 
+        public int EvalRisk(Game g) 
         {
             if (style == 2)
             {
-                return g.GetDeck().Pop().getVal();
+                return g.GetDeck().Pop().GetVal();
             }
             else
             {
                 try
                 {
-                    return (340 - g.handSum()) / (g.GetDeck().Count);
+                    return (340 - g.HandSum()) / (g.GetDeck().Count);
                 }
                 catch (Exception e) 
                 {
@@ -90,99 +98,31 @@ namespace Blackjack_Trainer
             }
         }
 
-        public Card addCard(int hand, Card card)
+        public Card AddCard(int hand, Card card)
         {
             deck[hand].Add(card);
-            if (card.getVal() == 1)
+            if (card.GetVal() == 1)
             {
                 handVal += 1;
                 handValAce += 11;
             }
             else
             {
-                handVal += card.getVal();
-                handValAce += card.getVal();
+                handVal += card.GetVal();
+                handValAce += card.GetVal();
             }
             //MessageBox.Show("Card added: " + card.getVal());
             return card;
         }
 
-        public List<List<Card>> getDeck() 
+        public List<List<Card>> GetDeck() 
         {
             return deck;
         }
 
-        public async Task<Data> turnAsync(Game g) 
-        {
-            Data ret = null;
-            if (stillIn() && !stood) 
-            {
-                if (!bot) //if player
-                {
-                    bool decisionMade = false;
-                    while (!decisionMade)
-                    {
-                        switch (btnPressed)
-                        {
-                            case 1:
-                                Card card = g.deck.Pop();
-                                ret = new Data(this, addCard(0, card), btnPressed);
-                                decisionMade = true;
-                                MessageBox.Show("Hit");
-                                btnPressed = 0;
-                                break;
-                            case 2:
-                                ret = new Data(this, null, btnPressed);
-                                decisionMade = true;
-                                stood = true;
-                                MessageBox.Show("Stand");
-                                btnPressed = 0;
-                                break;
-                            case 3:
-                                decisionMade = true;
-                                MessageBox.Show("Split");
-                                btnPressed = 0;
-                                break;
+        public abstract Task<Data> TurnAsync(Game g);
 
-                        }
-                        await Task.Delay(100); // Avoid blocking the UI thread
-                    }
-                }
-                else
-                {
-                    Random rand = new Random();
-                    if (dealer) //if dealer
-                    {
-                        if (handVal < 17 && handValAce < 17)
-                        {
-                            Card card = g.deck.Pop();
-                            ret = new Data(this, addCard(0, card), 1); //add card to dealer's hand
-                        }
-                        else
-                        {
-                            ret = new Data(this, null, 2);
-                            stood = true;
-                        }
-                    }
-                    else //if bot
-                    {
-                        if (evalRisk(g) + handVal <= 21 + diff * rand.NextDouble()) //if the player should hit
-                        {
-                            Card card = g.deck.Pop();
-                            ret = new Data(this, addCard(0, card), 1);
-                        }
-                        else //if the player should stand
-                        {
-                            ret = new Data(this, null, 2);
-                            stood = true;
-                        }
-                    }
-                }
-            }
-            return ret;
-        }
-
-        public void clearHand() 
+        public void ClearHand() 
         {
             deck.Clear();
             deck.Add(new List<Card>());
@@ -190,7 +130,7 @@ namespace Blackjack_Trainer
             handValAce = 0;
             stood = false;
         }
-        public void press(int selected) 
+        public void Press(int selected) 
         {
             btnPressed = selected;
         }
