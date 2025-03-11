@@ -309,6 +309,7 @@ namespace Blackjack_Trainer
             GameReview review= new GameReview(data, players.Count);
             this.Hide(); // Hide the Start form
             review.Show(); // Show the Game form
+            SortWinners();
         }
         private List<Player> SortWinners()
         {
@@ -317,17 +318,17 @@ namespace Blackjack_Trainer
             int n = players.Count;
             for (int i = 0; i < n - 1; i++)
             {
-                int minIndex = i;
+                int maxIndex = i;
                 for (int j = i + 1; j < n; j++)
                 {
-                    if (ret[j].GetWinnings() < ret[minIndex].GetWinnings())
+                    if (ret[j].GetWinnings() > ret[maxIndex].GetWinnings())
                     {
-                        minIndex = j;
+                        maxIndex = j;
                     }
                 }
                 // Swap the found minimum element with the first element
-                Player temp = ret[minIndex];
-                ret[minIndex] = ret[i];
+                Player temp = ret[maxIndex];
+                ret[maxIndex] = ret[i];
                 ret[i] = temp;
             }
             return ret;

@@ -9,7 +9,6 @@ namespace Blackjack_Trainer
 {
     internal class Client : Player
     {
-        private bool isComputerControlled;
 
         public Client()
             : base(-1, -1)

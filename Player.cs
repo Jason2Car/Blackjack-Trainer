@@ -92,8 +92,7 @@ namespace Blackjack_Trainer
                 }
                 catch (Exception e) 
                 {
-                    //divides by zero when there are no cards, so act like there's a full deck left
-                    return 340;
+                    return 340/52;
                 }
             }
         }
