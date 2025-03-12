@@ -106,7 +106,7 @@
             // 
             this.btnSeeAll.Location = new System.Drawing.Point(667, 415);
             this.btnSeeAll.Name = "btnSeeAll";
-            this.btnSeeAll.Size = new System.Drawing.Size(110, 23);
+            this.btnSeeAll.Size = new System.Drawing.Size(95, 23);
             this.btnSeeAll.TabIndex = 0;
             this.btnSeeAll.Text = "See All Hands";
             this.btnSeeAll.UseVisualStyleBackColor = true;
@@ -157,7 +157,7 @@
             this.txtBxScorePlayer.Enabled = false;
             this.txtBxScorePlayer.Location = new System.Drawing.Point(667, 389);
             this.txtBxScorePlayer.Name = "txtBxScorePlayer";
-            this.txtBxScorePlayer.Size = new System.Drawing.Size(100, 20);
+            this.txtBxScorePlayer.Size = new System.Drawing.Size(95, 20);
             this.txtBxScorePlayer.TabIndex = 5;
             // 
             // btnNewGame
@@ -196,14 +196,14 @@
             // txtBxScoreBot
             // 
             this.txtBxScoreBot.Enabled = false;
-            this.txtBxScoreBot.Location = new System.Drawing.Point(39, 377);
+            this.txtBxScoreBot.Location = new System.Drawing.Point(39, 389);
             this.txtBxScoreBot.Name = "txtBxScoreBot";
             this.txtBxScoreBot.Size = new System.Drawing.Size(100, 20);
             this.txtBxScoreBot.TabIndex = 9;
             // 
             // txtBxHasStood
             // 
-            this.txtBxHasStood.Location = new System.Drawing.Point(39, 403);
+            this.txtBxHasStood.Location = new System.Drawing.Point(39, 415);
             this.txtBxHasStood.Name = "txtBxHasStood";
             this.txtBxHasStood.Size = new System.Drawing.Size(100, 20);
             this.txtBxHasStood.TabIndex = 10;

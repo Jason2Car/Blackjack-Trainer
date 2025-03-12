@@ -114,6 +114,21 @@ namespace Blackjack_Trainer
             return card;
         }
 
+        public Card RemoveCard(int hand, Card card) 
+        {
+            deck[hand].Remove(card);
+            if (card.GetVal() == 1)
+            {
+                handVal -= 1;
+                handValAce -= 11;
+            }
+            else
+            {
+                handVal -= card.GetVal();
+                handValAce -= card.GetVal();
+            }
+            return card;
+        }
         public List<List<Card>> GetDeck() 
         {
             return deck;

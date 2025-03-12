@@ -222,7 +222,7 @@ namespace Blackjack_Trainer
             }
             //if the bot, then use this to show cards
 
-            if (player.IsComputer() && !player.IsComputer())
+            if (player.IsComputer() && !player.IsDealer())
             {
                 txtBxScoreBot.Text = "Score: " + player.GetHand();
                 txtBxHasStood.Text = "Has Stood: " + player.HasStood();
