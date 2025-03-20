@@ -21,6 +21,7 @@ namespace Blackjack_Trainer
         public Stack<Card> deck = new Stack<Card>();
         private List<Card> inHands = new List<Card>();
         private List<Player> players = new List<Player>();
+        private List<Player> copyOfPlayers = new List<Player>();
         private List<int> winings = new List<int>();
         private List<Data> data = new List<Data>();
 
@@ -87,7 +88,20 @@ namespace Blackjack_Trainer
                 }
                 inHands.Add(cur.AddCard(0, deck.Pop()));
                 inHands.Add(cur.AddCard(0, deck.Pop()));
-
+                Player copy = null;
+                switch (cur.Type())
+                {
+                    case 0:
+                        copy = new Dealer(cur);
+                        break;
+                    case 1:
+                        copy = new ComputerControlledPlayer(cur);
+                        break;
+                    case 2:
+                        copy = new Client(cur);
+                        break;
+                }
+                copyOfPlayers.Add(copy);
             }
             DisplayPlayerHand(players.First());//dealer's first
             DisplayPlayerHand(players.Last());//client's last
@@ -306,7 +320,7 @@ namespace Blackjack_Trainer
         {
 
             btnReview.Hide();
-            GameReview review= new GameReview(data, players.Count);
+            GameReview review= new GameReview(data, copyOfPlayers);
             this.Hide(); // Hide the Start form
             review.Show(); // Show the Game form
             SortWinners();

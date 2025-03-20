@@ -16,6 +16,12 @@ namespace Blackjack_Trainer
             isComputerControlled = false;
             isDealer = false;
         }
+        public Client(Player other)
+            : base(other)
+        {
+            isComputerControlled = false;
+            isDealer = false;
+        }
         public override async Task<Data> TurnAsync(Game g)
         {
             Data ret = null;
@@ -50,6 +56,11 @@ namespace Blackjack_Trainer
                 }
             }
             return ret;
+        }
+
+        public override int Type()
+        {
+            return 2;
         }
     }
 }

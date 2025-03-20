@@ -18,7 +18,18 @@ namespace Blackjack_Trainer
             card = c;
             action = a;
         }
-
+        public Player GetPlayer()
+        {
+            return player;
+        }
+        public Card GetCard()
+        {
+            return card;
+        }
+        public int GetAction()
+        {
+            return action;
+        }   
         override
         public string ToString()
         {

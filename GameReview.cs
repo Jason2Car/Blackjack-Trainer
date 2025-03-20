@@ -14,58 +14,95 @@ namespace Blackjack_Trainer
     public partial class GameReview : Form
     {
         List<Data> data;
-        List<Player> players = new List<Player>();
-        int currentTurn = 0;
+        List<Player> players;
+        int playerTurn = 0;// where the player wants to go
+        int currentTurn = 0; // this represents the last turn displayed
         public GameReview(List<Data> d, List<Player> p)
         {
             InitializeComponent();
-            data = d; 
-            for(int i = 0; i < p.Count; i++)
+            data = d;
+            players = p;
+            DisplayTurn();
+
+        }
+        public void DisplayTurn() {
+            MessageBox.Show(data.Count +" "+players.Count+ " " +currentTurn+" "+playerTurn);
+            if (playerTurn <= 1)
             {
-                players.Add(new Dealer()); //doesn't matter what type since just data storage
+                btnPrev.Hide();
             }
-            this.Load += async (sender, e) => await InitializeReviewAsync();
-
-        }
-
-
-        private async Task InitializeReviewAsync()
-        {
-            await StartReviewAsync();
-        }
-
-        private async Task StartReviewAsync()
-        {
-            txtBoxTurn.Text = "Turn: " + (currentTurn + 1);
-            DisplayTurn(currentTurn);
-        }
-        public async void DisplayTurn(int turn) {
-            for (int t = 0; t < currentTurn; t++) 
+            else 
             {
-                for (int curPlayer = 0; curPlayer < players.Count; curPlayer++) {
-                    Player cur = players[curPlayer];
-                    DisplayPlayerHand(cur);
-                    
-                    await PauseAsync(2000);
-
-
-                    if (!cur.IsComputer() || cur.IsDealer()) //if player or dealer
+                btnPrev.Show();
+            }
+            if (playerTurn >= (data.Count / players.Count)-1)
+            {
+                btnNext.Hide();
+            }
+            else 
+            {
+                btnNext.Show();
+            }
+            if (playerTurn >= currentTurn)
+            {
+                for (int t = currentTurn; t < playerTurn; t++) //go through the turns
+                {
+                    for (int curPlayer = 0; curPlayer < players.Count; curPlayer++) //go through players in each turn
                     {
-                        //txtBxScore.Text = "Score: " + cur.getHand();
-                        HidePlayerHand(cur);//remove old hand
-                        DisplayPlayerHand(cur);//display new hand
-                        //MessageBox.Show(cur.getBot()+" Hand: "+cur.getHand());
-                        await PauseAsync(1000);
+                        Data cur = data[t * players.Count + curPlayer];
+                        switch (cur.GetAction())
+                        {
+                            case 1://hit
+                                players[curPlayer].AddCard(0, cur.GetCard());
+                                break;
+                            case 2://stand
+                                break;
+                            case 3://split
+                                break;//need to implement
+                            default:
+                                MessageBox.Show("Error in data");
+                                break;
+                        }
 
-                    }
-                    else
-                    {
-                        DisplayPlayerHand(cur); //display new hand
-                        await PauseAsync(2000);
-                        HidePlayerHand(cur); //remove old hand
                     }
                 }
             }
+            else
+            {
+                for (int t = currentTurn; t < playerTurn; t--) //start at higher and go to lower turn
+                {
+                    for (int curPlayer = players.Count-1; curPlayer >= 0; curPlayer--) //go through players in each turn
+                    {
+                        Data cur = data[t * players.Count + curPlayer];
+                        switch (cur.GetAction())
+                        {
+                            case 1://hit
+                                players[curPlayer].RemoveCard(0, cur.GetCard());
+                                break;
+                            case 2://stand
+                                break;
+                            case 3://split
+                                break;//need to implement
+                            default:
+                                MessageBox.Show("Error in data");
+                                break;
+                        }
+
+                    }
+                }
+
+            }
+            currentTurn = playerTurn;
+            txtBoxTurn.Text = "Turn: " + (currentTurn + 1);
+            DisplayState();
+            MessageBox.Show("state displayed");
+        }
+        public void DisplayState() 
+        {
+            HidePlayerHand(players[players.Count - 1]);
+            DisplayPlayerHand(players[players.Count - 1]);//want the client
+            HidePlayerHand(players[0]);//want the dealer
+            DisplayPlayerHand(players[0]);//want the dealer
         }
         private void DisplayPlayerHand(Player player)
         {
@@ -94,23 +131,23 @@ namespace Blackjack_Trainer
             }
             //if the bot, then use this to show cards
 
-            if (player.IsComputer() && !player.IsDealer())
+            if (!player.IsComputer())
             {
-                txtBxScoreBot.Text = "Score: " + player.GetHand();
-                txtBxHasStood.Text = "Has Stood: " + player.HasStood();
+                txtBxScorePlayer.Text = "Score: " + player.GetHand();
+                //txtBxHasStood.Text = "Has Stood: " + player.HasStood();
                 //await PauseAsync(1000);
             }
 
-            foreach (List<Card> hand in player.GetDeck())
-            {
-                for (int i = 0; i < hand.Count; i++)
+                foreach (List<Card> hand in player.GetDeck())
                 {
-                    PictureBox pic = hand[i].GetPictureBox();
-                    pic.Location = new Point(xOffset + (i * cardSpacing), yOffset);
-                    this.Controls.Add(pic);
-                    pic.BringToFront();
+                    for (int i = 0; i < hand.Count; i++)
+                    {
+                        PictureBox pic = hand[i].GetPictureBox();
+                        pic.Location = new Point(xOffset + (i * cardSpacing), yOffset);
+                        this.Controls.Add(pic);
+                        pic.BringToFront();
+                    }
                 }
-            }
         }
 
         private void HidePlayerHand(Player player)
@@ -122,19 +159,19 @@ namespace Blackjack_Trainer
                     this.Controls.Remove(card.GetPictureBox());
                     //card.getPictureBox().Dispose();
                 }
-            txtBxScoreBot.Text = "Score: ";
-            txtBxHasStood.Text = "Has Stood: ";
 
         }
 
         private void btnNext_Click(object sender, EventArgs e)
         {
-
+            ++playerTurn;
+            DisplayTurn();
         }
 
         private void btnPrev_Click(object sender, EventArgs e)
         {
-
+            --playerTurn;
+            DisplayTurn();
         }
         public async Task PauseAsync(int milliseconds)
         {

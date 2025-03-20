@@ -29,6 +29,18 @@ namespace Blackjack_Trainer
             diff = d;
             style = s;
         }
+        public Player(Player other) 
+        {
+            this.deck = new List<List<Card>>();
+            for (int h = 0; h < other.deck.Count; h++)
+            {
+                this.deck.Add(new List<Card>());
+                foreach (Card c in other.deck[h])
+                {
+                    this.deck[h].Add(new Card(c.GetVal(), c.GetSuit(), c.GetPictureBox().Image));
+                }
+            }
+        }
         
 
         public int GetDifficulty()
@@ -39,19 +51,29 @@ namespace Blackjack_Trainer
         {
             return style;
         }
-
-        public bool StillIn() 
-        {
-            return (handVal <= 21 || handValAce <= 21);//either is <=21 then return true means still in, false means busted
-        }
         public int GetWinnings() 
         {
             return winnings;
         }
-
         public int GetButtonPressed() 
         {
             return btnPressed;
+        }
+        public bool IsComputer()
+        {
+            return isComputerControlled;
+        }
+        public bool IsDealer()
+        {
+            return isDealer;
+        }
+        public bool HasStood()
+        {
+            return stood;
+        }
+        public void SetStood(bool s)
+        {
+            stood = s;
         }
         public int GetHand() 
         {
@@ -61,23 +83,12 @@ namespace Blackjack_Trainer
             }*/
             return (handValAce > handVal && handValAce<=21)? handValAce: handVal;
         }
-        
-        public bool IsComputer() {
-            return isComputerControlled;
-        }
-        public bool IsDealer() {
-            return isDealer;
-        }
 
-        public bool HasStood() 
-        {
-            return stood;
-        }
-        public void SetStood(bool s) 
-        {
-            stood = s;
-        }
 
+        public bool StillIn()
+        {
+            return (handVal <= 21 || handValAce <= 21);//either is <=21 then return true means still in, false means busted
+        }
         public int EvalRisk(Game g) 
         {
             if (style == 2)
@@ -129,12 +140,15 @@ namespace Blackjack_Trainer
             }
             return card;
         }
+
         public List<List<Card>> GetDeck() 
         {
             return deck;
         }
 
         public abstract Task<Data> TurnAsync(Game g);
+
+        public abstract int Type();
 
         public void ClearHand() 
         {
