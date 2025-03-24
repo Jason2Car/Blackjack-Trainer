@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 
 
 namespace Blackjack_Trainer
@@ -29,6 +30,8 @@ namespace Blackjack_Trainer
         public Game(List<Player> p)
         {
             InitializeComponent();
+            InitializeChart();
+            chartWinnings.Hide();
             players = p;
             //MessageBox.Show("" + players.Last().stillIn()+" " + players.Last().hasStood());
             //Initialize cards, add one of each suit, total 52
@@ -41,7 +44,6 @@ namespace Blackjack_Trainer
                 }
             }
             //need to initialize players
-
             this.Load += async (sender, e) => await InitializeGameAsync();
         }
 
@@ -60,6 +62,7 @@ namespace Blackjack_Trainer
             //MessageBox.Show("Player stillin: " + players.Last().stillIn() + " Player has Stood" + players.Last().hasStood());
             //MessageBox.Show("Player hand: " + players.Last().getHand());
             int winner = FindWinner();
+            chartWinnings.Show();
             if (winner == players.Count - 1)
             {
                 MessageBox.Show("Game Over. You won");
@@ -207,7 +210,19 @@ namespace Blackjack_Trainer
                     winner = i;
                 }
             }
+            UpdateChartWithWinnings();
+
             return winner;
+        }
+        private void UpdateChartWithWinnings()
+        {
+            Series series = chartWinnings.Series["Winnings"];
+            //series.Points.Clear();
+
+            for (int i = 0; i < players.Count; i++)
+            {
+                series.Points.AddXY(i + 1, players[i].GetWinnings());
+            }
         }
         private void DisplayPlayerHand(Player player)
         {
@@ -346,6 +361,25 @@ namespace Blackjack_Trainer
                 ret[i] = temp;
             }
             return ret;
+        }
+        private void InitializeChart()
+        {
+            chartWinnings.Series.Clear();
+            chartWinnings.ChartAreas.Clear();
+
+            // Create a new chart area
+            ChartArea chartArea = new ChartArea();
+            chartWinnings.ChartAreas.Add(chartArea);
+
+            // Create a new series
+            Series series = new Series
+            {
+                Name = "Winnings",
+                Color = Color.Blue,
+                ChartType = SeriesChartType.Line
+            };
+            series.Points.AddXY(0, 0);
+            chartWinnings.Series.Add(series);
         }
     }
 }

@@ -30,6 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Game));
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.cardImgList = new System.Windows.Forms.ImageList(this.components);
             this.btnSeeAll = new System.Windows.Forms.Button();
             this.btnStand = new System.Windows.Forms.Button();
@@ -42,7 +45,11 @@
             this.btnReview = new System.Windows.Forms.Button();
             this.txtBxScoreBot = new System.Windows.Forms.TextBox();
             this.txtBxHasStood = new System.Windows.Forms.TextBox();
+            this.dataSetWinnings = new System.Data.DataSet();
+            this.chartWinnings = new System.Windows.Forms.DataVisualization.Charting.Chart();
             ((System.ComponentModel.ISupportInitialize)(this.imgTable)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataSetWinnings)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartWinnings)).BeginInit();
             this.SuspendLayout();
             // 
             // cardImgList
@@ -104,9 +111,10 @@
             // 
             // btnSeeAll
             // 
-            this.btnSeeAll.Location = new System.Drawing.Point(667, 415);
+            this.btnSeeAll.Location = new System.Drawing.Point(889, 511);
+            this.btnSeeAll.Margin = new System.Windows.Forms.Padding(4);
             this.btnSeeAll.Name = "btnSeeAll";
-            this.btnSeeAll.Size = new System.Drawing.Size(95, 23);
+            this.btnSeeAll.Size = new System.Drawing.Size(127, 28);
             this.btnSeeAll.TabIndex = 0;
             this.btnSeeAll.Text = "See All Hands";
             this.btnSeeAll.UseVisualStyleBackColor = true;
@@ -114,9 +122,10 @@
             // 
             // btnStand
             // 
-            this.btnStand.Location = new System.Drawing.Point(249, 342);
+            this.btnStand.Location = new System.Drawing.Point(332, 421);
+            this.btnStand.Margin = new System.Windows.Forms.Padding(4);
             this.btnStand.Name = "btnStand";
-            this.btnStand.Size = new System.Drawing.Size(75, 23);
+            this.btnStand.Size = new System.Drawing.Size(100, 28);
             this.btnStand.TabIndex = 1;
             this.btnStand.Text = "Stand";
             this.btnStand.UseVisualStyleBackColor = true;
@@ -124,9 +133,10 @@
             // 
             // btnHit
             // 
-            this.btnHit.Location = new System.Drawing.Point(373, 342);
+            this.btnHit.Location = new System.Drawing.Point(497, 421);
+            this.btnHit.Margin = new System.Windows.Forms.Padding(4);
             this.btnHit.Name = "btnHit";
-            this.btnHit.Size = new System.Drawing.Size(75, 23);
+            this.btnHit.Size = new System.Drawing.Size(100, 28);
             this.btnHit.TabIndex = 2;
             this.btnHit.Text = "Hit";
             this.btnHit.UseVisualStyleBackColor = true;
@@ -136,17 +146,19 @@
             // 
             this.imgTable.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.imgTable.Image = ((System.Drawing.Image)(resources.GetObject("imgTable.Image")));
-            this.imgTable.Location = new System.Drawing.Point(51, -4);
+            this.imgTable.Location = new System.Drawing.Point(68, -5);
+            this.imgTable.Margin = new System.Windows.Forms.Padding(4);
             this.imgTable.Name = "imgTable";
-            this.imgTable.Size = new System.Drawing.Size(711, 314);
+            this.imgTable.Size = new System.Drawing.Size(948, 386);
             this.imgTable.TabIndex = 4;
             this.imgTable.TabStop = false;
             // 
             // btnSplit
             // 
-            this.btnSplit.Location = new System.Drawing.Point(495, 342);
+            this.btnSplit.Location = new System.Drawing.Point(660, 421);
+            this.btnSplit.Margin = new System.Windows.Forms.Padding(4);
             this.btnSplit.Name = "btnSplit";
-            this.btnSplit.Size = new System.Drawing.Size(75, 23);
+            this.btnSplit.Size = new System.Drawing.Size(100, 28);
             this.btnSplit.TabIndex = 3;
             this.btnSplit.Text = "Split";
             this.btnSplit.UseVisualStyleBackColor = true;
@@ -155,16 +167,18 @@
             // txtBxScorePlayer
             // 
             this.txtBxScorePlayer.Enabled = false;
-            this.txtBxScorePlayer.Location = new System.Drawing.Point(667, 389);
+            this.txtBxScorePlayer.Location = new System.Drawing.Point(889, 479);
+            this.txtBxScorePlayer.Margin = new System.Windows.Forms.Padding(4);
             this.txtBxScorePlayer.Name = "txtBxScorePlayer";
-            this.txtBxScorePlayer.Size = new System.Drawing.Size(95, 20);
+            this.txtBxScorePlayer.Size = new System.Drawing.Size(125, 22);
             this.txtBxScorePlayer.TabIndex = 5;
             // 
             // btnNewGame
             // 
-            this.btnNewGame.Location = new System.Drawing.Point(294, 386);
+            this.btnNewGame.Location = new System.Drawing.Point(392, 475);
+            this.btnNewGame.Margin = new System.Windows.Forms.Padding(4);
             this.btnNewGame.Name = "btnNewGame";
-            this.btnNewGame.Size = new System.Drawing.Size(75, 23);
+            this.btnNewGame.Size = new System.Drawing.Size(100, 28);
             this.btnNewGame.TabIndex = 6;
             this.btnNewGame.Text = "New Game";
             this.btnNewGame.UseVisualStyleBackColor = true;
@@ -173,9 +187,10 @@
             // 
             // btnNewSettings
             // 
-            this.btnNewSettings.Location = new System.Drawing.Point(454, 386);
+            this.btnNewSettings.Location = new System.Drawing.Point(605, 475);
+            this.btnNewSettings.Margin = new System.Windows.Forms.Padding(4);
             this.btnNewSettings.Name = "btnNewSettings";
-            this.btnNewSettings.Size = new System.Drawing.Size(78, 23);
+            this.btnNewSettings.Size = new System.Drawing.Size(104, 28);
             this.btnNewSettings.TabIndex = 7;
             this.btnNewSettings.Text = "New Settings";
             this.btnNewSettings.UseVisualStyleBackColor = true;
@@ -184,9 +199,10 @@
             // 
             // btnReview
             // 
-            this.btnReview.Location = new System.Drawing.Point(373, 325);
+            this.btnReview.Location = new System.Drawing.Point(497, 400);
+            this.btnReview.Margin = new System.Windows.Forms.Padding(4);
             this.btnReview.Name = "btnReview";
-            this.btnReview.Size = new System.Drawing.Size(75, 23);
+            this.btnReview.Size = new System.Drawing.Size(100, 28);
             this.btnReview.TabIndex = 8;
             this.btnReview.Text = "Review";
             this.btnReview.UseVisualStyleBackColor = true;
@@ -196,25 +212,49 @@
             // txtBxScoreBot
             // 
             this.txtBxScoreBot.Enabled = false;
-            this.txtBxScoreBot.Location = new System.Drawing.Point(39, 389);
+            this.txtBxScoreBot.Location = new System.Drawing.Point(52, 479);
+            this.txtBxScoreBot.Margin = new System.Windows.Forms.Padding(4);
             this.txtBxScoreBot.Name = "txtBxScoreBot";
-            this.txtBxScoreBot.Size = new System.Drawing.Size(100, 20);
+            this.txtBxScoreBot.Size = new System.Drawing.Size(132, 22);
             this.txtBxScoreBot.TabIndex = 9;
             // 
             // txtBxHasStood
             // 
-            this.txtBxHasStood.Location = new System.Drawing.Point(39, 415);
+            this.txtBxHasStood.Location = new System.Drawing.Point(52, 511);
+            this.txtBxHasStood.Margin = new System.Windows.Forms.Padding(4);
             this.txtBxHasStood.Name = "txtBxHasStood";
-            this.txtBxHasStood.Size = new System.Drawing.Size(100, 20);
+            this.txtBxHasStood.Size = new System.Drawing.Size(132, 22);
             this.txtBxHasStood.TabIndex = 10;
             this.txtBxHasStood.Text = "Has Stood: ";
             // 
+            // dataSetWinnings
+            // 
+            this.dataSetWinnings.DataSetName = "DataSetWinnings";
+            // 
+            // chartWinnings
+            // 
+            this.chartWinnings.AccessibleName = "chartWinnings";
+            chartArea1.Name = "ChartArea1";
+            this.chartWinnings.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chartWinnings.Legends.Add(legend1);
+            this.chartWinnings.Location = new System.Drawing.Point(332, 158);
+            this.chartWinnings.Name = "chartWinnings";
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chartWinnings.Series.Add(series1);
+            this.chartWinnings.Size = new System.Drawing.Size(300, 300);
+            this.chartWinnings.TabIndex = 12;
+            this.chartWinnings.Text = "chartWinnings";
+            // 
             // Game
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.WindowFrame;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1067, 554);
+            this.Controls.Add(this.chartWinnings);
             this.Controls.Add(this.txtBxHasStood);
             this.Controls.Add(this.txtBxScoreBot);
             this.Controls.Add(this.btnReview);
@@ -226,9 +266,12 @@
             this.Controls.Add(this.btnStand);
             this.Controls.Add(this.btnSeeAll);
             this.Controls.Add(this.imgTable);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Game";
             this.Text = "Blackjack Trainer";
             ((System.ComponentModel.ISupportInitialize)(this.imgTable)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataSetWinnings)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartWinnings)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -248,5 +291,7 @@
         private System.Windows.Forms.Button btnReview;
         private System.Windows.Forms.TextBox txtBxScoreBot;
         private System.Windows.Forms.TextBox txtBxHasStood;
+        private System.Data.DataSet dataSetWinnings;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartWinnings;
     }
 }
