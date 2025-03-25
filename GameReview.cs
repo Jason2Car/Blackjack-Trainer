@@ -17,9 +17,11 @@ namespace Blackjack_Trainer
         List<Player> players;
         int playerTurn = 0;// where the player wants to go
         int currentTurn = 0; // this represents the last turn displayed
-        public GameReview(List<Data> d, List<Player> p)
+        Game game;
+        public GameReview(Game g, List<Data> d, List<Player> p)
         {
             InitializeComponent();
+            game = g;
             data = d;
             players = p;
             DisplayTurn();
@@ -41,7 +43,7 @@ namespace Blackjack_Trainer
             {
                 btnPrev.Show();
             }
-            if (playerTurn >= (data.Count / players.Count)-1)
+            if (playerTurn >= (data.Count / players.Count))
             {
                 btnNext.Hide();
             }
@@ -58,11 +60,17 @@ namespace Blackjack_Trainer
                         Data cur = data[t * players.Count + curPlayer];
                         switch (cur.GetAction())
                         {
+                            case -1://bust
+                                txtBxAdvice.AppendText("\n This turn you busted");
+                                break;
                             case 1://hit
                                 players[curPlayer].AddCard(0, cur.GetCard());
+                                txtBxAdvice.AppendText("\n This turn you hit");
                                 break;
                             case 2://stand
+                                txtBxAdvice.AppendText("\n This turn you stood");
                                 break;
+
                             case 3://split
                                 break;//need to implement
                             default:
@@ -107,8 +115,7 @@ namespace Blackjack_Trainer
         {
             String ret = "";
             StringBuilder advice = new StringBuilder();
-            Game g = new Game(null);
-            List<Card> remainingDeck = new List<Card>(g.GetDeck());
+            List<Card> remainingDeck = new List<Card>(game.CopyDeck());
             MessageBox.Show(""+remainingDeck.Count());
             Player client = players.Last(); // Assuming the client is the last player
             Player dealer = players[0]; // Assuming the dealer is the first player
@@ -123,7 +130,7 @@ namespace Blackjack_Trainer
                     {
                         if (!remainingDeck.Remove(card)) 
                         {
-                            remainingDeck.AddRange(g.GetDeck());//add another deck
+                            remainingDeck.AddRange(game.CopyDeck());//add another deck
                             remainingDeck.Remove(card); //try again
                         }
                     }
@@ -238,12 +245,14 @@ namespace Blackjack_Trainer
         private void btnNext_Click(object sender, EventArgs e)
         {
             ++playerTurn;
+            txtBxAdvice.Clear();
             DisplayTurn();
         }
 
         private void btnPrev_Click(object sender, EventArgs e)
         {
             --playerTurn;
+            txtBxAdvice.Clear();
             DisplayTurn();
         }
         public async Task PauseAsync(int milliseconds)

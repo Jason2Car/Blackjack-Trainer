@@ -95,13 +95,13 @@ namespace Blackjack_Trainer
         {
             if (style == 2)
             {
-                return g.GetDeck().Pop().GetVal();
+                return g.CopyDeck().Pop().GetVal();
             }
             else
             {
                 try
                 {
-                    return (340 - g.HandSum()) / (g.GetDeck().Count);
+                    return (340 - g.HandSum()) / (g.CopyDeck().Count);
                 }
                 catch (Exception e) 
                 {
@@ -180,14 +180,15 @@ namespace Blackjack_Trainer
 
         public void Stand(Game g)
         {
-            HasStood = true;
+            stood = true;
         }
         public List<List<Card>> CopyDeck()
         {
-            List<List<Card>> copy = new List<List<>>();
+            List<List<Card>> copy = new List<List<Card>>();
+            copy.Add(new List<Card>());
             foreach(Card c in deck[0])//sorta given up on multiple hands
             {
-                copy[0].add(c);
+                copy[0].Add(c);
             }
             return copy;
         }

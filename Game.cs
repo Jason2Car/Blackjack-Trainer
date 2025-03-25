@@ -42,7 +42,7 @@ namespace Blackjack_Trainer
             players = p;
             //MessageBox.Show("" + players.Last().stillIn()+" " + players.Last().hasStood());
             //Initialize cards, add one of each suit, total 52
-            cards = GetCards();
+            cards = NewCards();
             conservativeClient = new ComputerControlledPlayer(1,0);
             riskyClient = new ComputerControlledPlayer(1,1);
             conservativeDealer = new Dealer();
@@ -76,6 +76,35 @@ namespace Blackjack_Trainer
         {
             data = new List<Data>();//reset after every game since I'm not sure how to implement
             await StartGameAsync();
+        }
+        private int GameSimulation(Player replacement)
+        {
+            //create the teams to be used
+            List<Player> simulatedPlayers = new List<Player>();
+            for (int i = 0; i < players.Count; i++)
+            {
+                if (i == players.Count - 1) //client
+                {
+                    simulatedPlayers[i] = replacement;
+                }
+                else
+                {
+                    simulatedPlayers[i] = players[i];
+                }
+            }
+
+            while(StillPlay(simulatedPlayers))
+            {
+                for (int i = 0; i < simulatedPlayers.Count; i++)
+                {
+                    Player cur = simulatedPlayers[i];
+                    if (cur.StillIn() && !cur.HasStood())
+                    {
+                        cur.TurnAsync(this);
+                    }
+                }
+            }
+            return simulatedPlayers.Last().GetWinnings(); //return the winnings of the simulated client
         }
         private async Task StartGameAsync()
         {
@@ -148,15 +177,17 @@ namespace Blackjack_Trainer
                 }
                 copyOfPlayers.Add(copy);
             }
+
+
             DisplayPlayerHand(players.First());//dealer's first
             DisplayPlayerHand(players.Last());//client's last
-            while (StillPlay())
+            while (StillPlay(players))
             {
                 txtBxScorePlayer.Text = "Score: " + players.Last().GetHand();
                 //MessageBox.Show("another round");
                 for (int i = 0; i<players.Count; i++)
                 {
-                    cur = players[i];
+                    Player cur = players[i];
                     DisplayPlayerHand(cur);
                     if (!cur.IsComputer())//if client
                     {
@@ -174,21 +205,6 @@ namespace Blackjack_Trainer
                     List<List<Card>> temp = cur.CopyDeck();
                     Data result = await cur.TurnAsync(this);
                     data.Add(result);
-                    if(i==players.Count-1 && result.GetAction()==1)//if client and they stood
-                    {
-                        riskyClient.Hit(this);
-                        riskyToggle = true;
-                    }
-                    else if(result.GetAction()!=-1)//if client didn't stand, or isn't currently bust
-                    {
-                        conservativeClient.SetDeck(temp);//copies the deck before any additions,
-                        conservativeToggle = true;
-                    }
-                    if(!players.Last().stillIn() && )//if the client bust, 
-                    {
-
-                    }
-
                     btnHit.Hide();
                     btnStand.Hide();
                     btnSplit.Hide();
@@ -217,9 +233,9 @@ namespace Blackjack_Trainer
             btnReview.Show();
         }
 
-        public bool StillPlay()
+        public bool StillPlay(List<Player> play)
         {
-            foreach (Player i in players) 
+            foreach (Player i in play) 
             { 
                 if (i.StillIn() && !i.HasStood()) 
                 { 
@@ -232,22 +248,26 @@ namespace Blackjack_Trainer
         public Stack<Card> NewDeck() 
         {
             deck = new Stack<Card>();
-            List<Card> tempCards = new List<Card>(cards);
+            List<Card> tempCards = new List<Card>(NewCards());
             Random rand = new Random();
             while (tempCards.Count>0)
             {
                 int pos = (int)(tempCards.Count * rand.NextDouble());
-                deck.Push(tempCards.ElementAt(pos));
+                deck.Push(tempCards[pos]);
                 tempCards.RemoveAt(pos);
             }
             //MessageBox.Show("New deck added");
             return deck;
         }
 
-        public Stack<Card> GetDeck()
+        public Stack<Card> CopyDeck()
         {
-            Stack<Card> temp = new Stack<Card>(deck);
-            return temp;
+            Stack<Card> copy = new Stack<Card>();
+            foreach (Card card in deck) 
+            {
+                copy.Push(card); //copy the deck
+            }
+            return copy;
         }
 
         public int HandSum() 
@@ -275,7 +295,7 @@ namespace Blackjack_Trainer
                     winner = i;
                 }
 
-                cur.UpdateWinnings(cur.GetHand()+GiveWinnings(cur) * (Won(p) ? 1 : -1));
+                cur.UpdateWinnings(cur.GetWinnings()+GiveWinnings(cur) * (Won(cur) ? 1 : -1));
             }
 
 
@@ -476,7 +496,7 @@ namespace Blackjack_Trainer
         {
 
             btnReview.Hide();
-            GameReview review= new GameReview(data, copyOfPlayers);
+            GameReview review= new GameReview(this, data, copyOfPlayers);
             this.Hide(); // Hide the Start form
             review.Show(); // Show the Game form
             SortWinners();
@@ -540,7 +560,7 @@ namespace Blackjack_Trainer
             chartWinnings.Series.Add(risky);
             chartWinnings.Series.Add(conservative);
         }
-        public List<Card> GetCards()
+        public List<Card> NewCards()
         {
             List<Card> ret = new List<Card>();
             for (int val = 1; val <= 13; val++)
