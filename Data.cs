@@ -10,7 +10,7 @@ namespace Blackjack_Trainer
     {
         private Player player;
         private Card card;
-        private int action; //hit, stand, split
+        private int action; //bust, hit, stand, split
         public Data() { }
         public Data(Player p, Card c, int a) 
         {

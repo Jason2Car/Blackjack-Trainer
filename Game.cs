@@ -26,10 +26,12 @@ namespace Blackjack_Trainer
         private List<int> winings = new List<int>();
         private List<Data> data = new List<Data>();
         private int clientBet;
-        private int riskyHandVal;
-        private int conservativeHandVal;
         private Player riskyClient;
+        private Player riskyDealer;
         private Player conservativeClient;
+        private Player conservativeDealer;
+        private bool riskyToggle = false;//toggles on and off when order changes due to different actions
+        private bool conservativeToggle = false;
 
         //private bool btnSelected = false;
         public Game(List<Player> p)
@@ -43,6 +45,8 @@ namespace Blackjack_Trainer
             cards = GetCards();
             conservativeClient = new ComputerControlledPlayer(1,0);
             riskyClient = new ComputerControlledPlayer(1,1);
+            conservativeDealer = new Dealer();
+            riskyDealer = new Dealer();
             panelClientCards.AutoScroll = true;
             panelPlayersCards.AutoScroll = true;
             panelDealerCards.AutoScroll = true;
@@ -112,8 +116,23 @@ namespace Blackjack_Trainer
                 {
                     NewDeck();
                 }
-                inHands.Add(cur.AddCard(0, deck.Pop()));
-                inHands.Add(cur.AddCard(0, deck.Pop()));
+                Card added = cur.AddCard(0, deck.Pop());
+                inHands.Add(added);
+                if(!cur.IsComputer())//if client
+                {
+                    riskyClient.AddCard(0,added);
+                    conservativeClient.AddCard(0,added);
+                }
+                added = cur.AddCard(0, deck.Pop());
+                inHands.Add(added);
+                if(!cur.IsComputer())//if client
+                {
+                    riskyClient.AddCard(0,added);
+                    conservativeClient.AddCard(0,added);
+                }
+
+
+
                 Player copy = null;
                 switch (cur.Type())
                 {
@@ -135,10 +154,11 @@ namespace Blackjack_Trainer
             {
                 txtBxScorePlayer.Text = "Score: " + players.Last().GetHand();
                 //MessageBox.Show("another round");
-                foreach (Player cur in players)
+                for (int i = 0; i<players.Count; i++)
                 {
+                    cur = players[i];
                     DisplayPlayerHand(cur);
-                    if (!cur.IsComputer())
+                    if (!cur.IsComputer())//if client
                     {
                         btnHit.Show();
                         btnStand.Show();
@@ -149,8 +169,25 @@ namespace Blackjack_Trainer
                         await PauseAsync(2000);
                     }
 
+                    //now i could simulate a whole game with the client replaced by a computer controlled player but that's not possible in this timeframe
+                    
+                    List<List<Card>> temp = cur.CopyDeck();
                     Data result = await cur.TurnAsync(this);
                     data.Add(result);
+                    if(i==players.Count-1 && result.GetAction()==1)//if client and they stood
+                    {
+                        riskyClient.Hit(this);
+                        riskyToggle = true;
+                    }
+                    else if(result.GetAction()!=-1)//if client didn't stand, or isn't currently bust
+                    {
+                        conservativeClient.SetDeck(temp);//copies the deck before any additions,
+                        conservativeToggle = true;
+                    }
+                    if(!players.Last().stillIn() && )//if the client bust, 
+                    {
+
+                    }
 
                     btnHit.Hide();
                     btnStand.Hide();
@@ -173,6 +210,8 @@ namespace Blackjack_Trainer
 
                 }
             }
+            txtBxScorePlayer.Text = "Score: " + players.Last().GetHand();
+            
             btnNewGame.Show();
             btnNewSettings.Show();
             btnReview.Show();
