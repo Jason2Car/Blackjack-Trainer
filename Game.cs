@@ -35,7 +35,7 @@ namespace Blackjack_Trainer
             players = p;
             //MessageBox.Show("" + players.Last().stillIn()+" " + players.Last().hasStood());
             //Initialize cards, add one of each suit, total 52
-            cards = new List<Card>();
+            cards = GetCards();
 
             panelClientCards.AutoScroll = true;
 
@@ -46,13 +46,7 @@ namespace Blackjack_Trainer
             panelDealerCards.AutoScroll = true;
 
 
-            for (int val = 1; val <= 13; val++)
-            {
-                for (int suit = 0; suit < 4; suit++) 
-                {
-                    cards.Add(new Card(Math.Min(val, 10), suit, cardImgList.Images[(val-1) * 4 + suit]));
-                }
-            }
+            
             //need to initialize players
             this.Load += async (sender, e) => await InitializeGameAsync();
         }
@@ -392,6 +386,17 @@ namespace Blackjack_Trainer
             series.Points.AddXY(0, 0);
             chartWinnings.Series.Add(series);
         }
-
+        public List<Card> GetCards()
+        {
+            List<Card> ret = new List<Card>();
+            for (int val = 1; val <= 13; val++)
+            {
+                for (int suit = 0; suit < 4; suit++)
+                {
+                    ret.Add(new Card(Math.Min(val, 10), suit, cardImgList.Images[(val - 1) * 4 + suit]));
+                }
+            }
+            return ret;
+        }
     }
 }

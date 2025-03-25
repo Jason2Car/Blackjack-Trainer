@@ -55,9 +55,5 @@ namespace Blackjack_Trainer
             return ret;
         }
 
-        internal string GetAdvice()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

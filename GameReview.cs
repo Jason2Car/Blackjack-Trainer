@@ -35,7 +35,7 @@ namespace Blackjack_Trainer
         }
         public void DisplayTurn() {
             MessageBox.Show(data.Count +" "+players.Count+ " " +currentTurn+" "+playerTurn);
-            txtBxAdvice.Text = data[playerTurn * players.Count].GetAdvice();
+            txtBxAdvice.Text = GetAdvice();
             if (playerTurn <= 1)
             {
                 btnPrev.Hide();
@@ -109,9 +109,58 @@ namespace Blackjack_Trainer
         public string GetAdvice() 
         {
             String ret = "";
-            //go through every player's every hand to find what cards are currently out of the deck
-            //then using the current deck, find what the probability of the remaining cards won't bust the client or players[players.Count-1]
-            return ret;
+            StringBuilder advice = new StringBuilder();
+            Game g = new Game(null);
+            List<Card> remainingDeck = new List<Card>(g.GetDeck());
+            Player client = players[players.Count - 1]; // Assuming the client is the last player
+            Player dealer = players[0]; // Assuming the dealer is the first player
+            int clientHandValue = client.GetHand();
+
+
+            foreach (Player player in players)
+            {
+                foreach (List<Card> hand in player.GetDeck())
+                {
+                    foreach (Card card in hand)
+                    {
+                        if (!remainingDeck.Remove(card)) 
+                        {
+                            remainingDeck.AddRange(g.GetDeck());
+                            remainingDeck.Remove(card);
+                        }
+                    }
+                }
+            }
+            // Calculate the probability of drawing a card that won't bust the client
+            int safeCards = remainingDeck.Count(card => (clientHandValue + card.GetVal() <= 21));
+            double safeCardProbability = (double)safeCards / remainingDeck.Count * 100;
+
+            advice.AppendLine($"Probability of drawing a safe card: {safeCardProbability:F2}%\n");
+            // Add more advice based on the game state
+            if (client.GetHand() == 21)
+            {
+                advice.AppendLine("You have a blackjack! Stand and hope the dealer doesn't have one too.");
+            }
+            else if (dealer.GetHand() >= client.GetHand())
+            {
+                advice.AppendLine("Since the dealer has a higher hand than you, the best paths are to either surredner to reduce losses or to hit to hope to win");
+            }
+            else if (dealer.GetHand() <= 17 && client.GetHand() > 17)
+            {
+                advice.AppendLine("Since the dealer has a hand less than 17, they can grow to beat you. You choose if you want to stand, hoping their lower, or hit to be more secure, but also risking busting");
+                if(safeCardProbability > 50)
+                {
+                    advice.AppendLine("Due to the probabilty of drawing a safe card, it is recommended to stand.");
+                }
+                else
+                {
+                    advice.AppendLine("Due to the probabilty of drawing a safe card, it is recommended to hit.");
+                }
+            }
+
+                //go through every player's every hand to find what cards are currently out of the deck
+                //then using the current deck, find what the probability of the remaining cards won't bust the client or players[players.Count-1]
+            return advice.ToString();
         }
         public void DisplayState() 
         {
