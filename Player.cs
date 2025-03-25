@@ -170,5 +170,30 @@ namespace Blackjack_Trainer
         {
             btnPressed = selected;
         }
+
+        public void Hit(Game g)
+        {
+
+            Card card = g.deck.Peek();
+            AddCard(0, card);
+        }
+
+        public void Stand(Game g)
+        {
+            HasStood = true;
+        }
+        public List<List<Card>> CopyDeck()
+        {
+            List<List<Card>> copy = new List<List<>>();
+            foreach(Card c in deck[0])//sorta given up on multiple hands
+            {
+                copy[0].add(c);
+            }
+            return copy;
+        }
+        public void SetDeck(List<List<Card>> other)
+        {
+            deck = other;
+        }
     }
 }

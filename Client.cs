@@ -24,7 +24,7 @@ namespace Blackjack_Trainer
         }
         public override async Task<Data> TurnAsync(Game g)
         {
-            Data ret = null;
+            Data ret = new Data(this, null, -1);//if they bust, they basically stood, we check for stillIn() anyways before
             if (StillIn() && !stood)
             {
                 bool decisionMade = false;
