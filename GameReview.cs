@@ -15,11 +15,13 @@ namespace Blackjack_Trainer
     {
         List<Data> data;
         List<Player> players;
+        Game game;
         int playerTurn = 0;// where the player wants to go
         int currentTurn = 0; // this represents the last turn displayed
-        public GameReview(List<Data> d, List<Player> p)
+        public GameReview(Game g, List<Data> d, List<Player> p)
         {
             InitializeComponent();
+            game = g;
             data = d;
             players = p;
             DisplayTurn();
@@ -41,7 +43,7 @@ namespace Blackjack_Trainer
             {
                 btnPrev.Show();
             }
-            if (playerTurn >= (data.Count / players.Count)-1)
+            if (playerTurn >= (data.Count / players.Count))
             {
                 btnNext.Hide();
             }
@@ -107,8 +109,7 @@ namespace Blackjack_Trainer
         {
             String ret = "";
             StringBuilder advice = new StringBuilder();
-            Game g = new Game(null);
-            List<Card> remainingDeck = new List<Card>(g.GetDeck());
+            List<Card> remainingDeck = new List<Card>(game.GetCards());
             MessageBox.Show(""+remainingDeck.Count());
             Player client = players.Last(); // Assuming the client is the last player
             Player dealer = players[0]; // Assuming the dealer is the first player
@@ -123,7 +124,7 @@ namespace Blackjack_Trainer
                     {
                         if (!remainingDeck.Remove(card)) 
                         {
-                            remainingDeck.AddRange(g.GetDeck());//add another deck
+                            remainingDeck.AddRange(game.GetCards());//add another deck
                             remainingDeck.Remove(card); //try again
                         }
                     }

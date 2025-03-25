@@ -48,6 +48,13 @@ namespace Blackjack_Trainer
             panelDealerCards.AutoScroll = true;
 
 
+
+            //need to initialize players
+            this.Load += async (sender, e) => await InitializeGameAsync();
+        }
+
+        private async Task InitializeGameAsync()
+        {
             // Show the BettingAmount form to get the client's bet
             using (BettingAmount bettingForm = new BettingAmount(players.Last().GetWinnings()))
             {
@@ -64,12 +71,6 @@ namespace Blackjack_Trainer
                 }
             }
 
-            //need to initialize players
-            this.Load += async (sender, e) => await InitializeGameAsync();
-        }
-
-        private async Task InitializeGameAsync()
-        {
             data = new List<Data>();//reset after every game since I'm not sure how to implement
             await StartGameAsync();
         }
@@ -236,7 +237,7 @@ namespace Blackjack_Trainer
                     winner = i;
                 }
 
-                cur.UpdateWinnings(cur.GetHand()+GiveWinnings(cur) * (Won(p) ? 1 : -1));
+                cur.UpdateWinnings(cur.GetHand()+GiveWinnings(cur) * (Won(cur) ? 1 : -1));
             }
 
 
@@ -437,7 +438,7 @@ namespace Blackjack_Trainer
         {
 
             btnReview.Hide();
-            GameReview review= new GameReview(data, copyOfPlayers);
+            GameReview review= new GameReview(this, data, copyOfPlayers);
             this.Hide(); // Hide the Start form
             review.Show(); // Show the Game form
             SortWinners();
