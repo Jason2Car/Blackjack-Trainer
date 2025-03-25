@@ -109,7 +109,8 @@ namespace Blackjack_Trainer
             StringBuilder advice = new StringBuilder();
             Game g = new Game(null);
             List<Card> remainingDeck = new List<Card>(g.GetDeck());
-            Player client = players[players.Count - 1]; // Assuming the client is the last player
+            MessageBox.Show(""+remainingDeck.Count());
+            Player client = players.Last(); // Assuming the client is the last player
             Player dealer = players[0]; // Assuming the dealer is the first player
             int clientHandValue = client.GetHand();
 
@@ -122,15 +123,17 @@ namespace Blackjack_Trainer
                     {
                         if (!remainingDeck.Remove(card)) 
                         {
-                            remainingDeck.AddRange(g.GetDeck());
-                            remainingDeck.Remove(card);
+                            remainingDeck.AddRange(g.GetDeck());//add another deck
+                            remainingDeck.Remove(card); //try again
                         }
                     }
                 }
             }
             // Calculate the probability of drawing a card that won't bust the client
             int safeCards = remainingDeck.Count(card => (clientHandValue + card.GetVal() <= 21));
-            double safeCardProbability = (double)safeCards / remainingDeck.Count * 100;
+            double safeCardProbability = remainingDeck.Count > 0 ? (double)safeCards / remainingDeck.Count * 100 : 0;
+
+            //double safeCardProbability = (double)safeCards / remainingDeck.Count * 100;
 
             advice.AppendLine($"Probability of drawing a safe card: {safeCardProbability:F2}%\n");
             // Add more advice based on the game state
@@ -197,8 +200,6 @@ namespace Blackjack_Trainer
             //values to get which image to show, then no need to hold images in cards
             // Display current hand
 
-            int xOffset; // Starting X position
-            int yOffset;  // Starting Y position
             int cardSpacing = 75; // Space between cards
             Panel cur = null;
             if (player.IsDealer())

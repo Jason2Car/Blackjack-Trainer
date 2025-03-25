@@ -107,6 +107,7 @@
             this.txtBxAdvice.Location = new System.Drawing.Point(173, 337);
             this.txtBxAdvice.Multiline = true;
             this.txtBxAdvice.Name = "txtBxAdvice";
+            this.txtBxAdvice.ReadOnly = true;
             this.txtBxAdvice.Size = new System.Drawing.Size(605, 135);
             this.txtBxAdvice.TabIndex = 10;
             this.txtBxAdvice.Text = "hello";
