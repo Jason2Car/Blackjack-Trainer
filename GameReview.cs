@@ -33,7 +33,7 @@ namespace Blackjack_Trainer
         public void DisplayTurn() {
             MessageBox.Show(data.Count +" "+players.Count+ " " +currentTurn+" "+playerTurn);
             txtBxAdvice.Text = GetAdvice();
-            if (playerTurn <= 1)
+            if (playerTurn <= 0)
             {
                 btnPrev.Hide();
             }
@@ -134,7 +134,11 @@ namespace Blackjack_Trainer
 
             advice.AppendLine($"Probability of drawing a safe card: {safeCardProbability:F2}%\n");
             // Add more advice based on the game state
-            if (dealer.GetHand() == 21)
+            if (client.GetHand() > 21) 
+            {
+                advice.AppendLine("You busted so there's nothing you can do");
+            }
+            else if (dealer.GetHand() == 21)
             {
                 advice.AppendLine("The dealer has a blackjack! You should surrender to minimize your losses.");
             }
@@ -154,7 +158,8 @@ namespace Blackjack_Trainer
                 }
                 else if (dealer.GetHand() >= client.GetHand())
                 {
-                    advice.AppendLine("Since the dealer has a higher hand than you, the best paths are to either surredner to reduce losses or to hit to hope to win");
+                    MessageBox.Show(dealer.GetHand() + " " + client.GetHand());
+                    advice.AppendLine("Since the dealer has a higher or equal hand than you, the best paths are to either surredner to reduce losses or to hit to hope to win");
                 }
                 else if (dealer.GetHand() < 17 && client.GetHand() > 17)
                 {
@@ -167,6 +172,10 @@ namespace Blackjack_Trainer
                     {
                         advice.AppendLine("Due to the probabilty of drawing a safe card, it is recommended to hit.");
                     }
+                }
+                else 
+                {
+                    advice.AppendLine("Game has nothing special or important to say right now. Nothing to say yet");
                 }
 
             }

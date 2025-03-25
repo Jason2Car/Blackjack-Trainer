@@ -47,6 +47,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BettingAmount.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BettingAmount.Designer.cs">
+      <DependentUpon>BettingAmount.cs</DependentUpon>
+    </Compile>
     <Compile Include="Card.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="ComputerControlledPlayer.cs" />
@@ -73,6 +79,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="BettingAmount.resx">
+      <DependentUpon>BettingAmount.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GameReview.resx">
       <DependentUpon>GameReview.cs</DependentUpon>
     </EmbeddedResource>

@@ -132,7 +132,7 @@
             // 
             this.btnNewSettings.Location = new System.Drawing.Point(16, 519);
             this.btnNewSettings.Name = "btnNewSettings";
-            this.btnNewSettings.Size = new System.Drawing.Size(100, 23);
+            this.btnNewSettings.Size = new System.Drawing.Size(132, 23);
             this.btnNewSettings.TabIndex = 20;
             this.btnNewSettings.Text = "New Settings";
             this.btnNewSettings.UseVisualStyleBackColor = true;

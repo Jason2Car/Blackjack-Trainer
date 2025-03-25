@@ -25,6 +25,7 @@ namespace Blackjack_Trainer
         private List<Player> copyOfPlayers = new List<Player>();
         private List<int> winings = new List<int>();
         private List<Data> data = new List<Data>();
+        private int clientBet;
 
         //private bool btnSelected = false;
         public Game(List<Player> p)
@@ -38,15 +39,26 @@ namespace Blackjack_Trainer
             cards = GetCards();
 
             panelClientCards.AutoScroll = true;
-
-
             panelPlayersCards.AutoScroll = true;
-
-
             panelDealerCards.AutoScroll = true;
 
 
-            
+            // Show the BettingAmount form to get the client's bet
+            using (BettingAmount bettingForm = new BettingAmount(players.Last().GetWinnings()))
+            {
+                if (bettingForm.ShowDialog() == DialogResult.OK)
+                {
+                    clientBet = bettingForm.BetAmount;
+                }
+                else
+                {
+                    // Handle the case where the user cancels the betting form
+                    MessageBox.Show("Betting was canceled. Exiting the game.");
+                    this.Close();
+                    return;
+                }
+            }
+
             //need to initialize players
             this.Load += async (sender, e) => await InitializeGameAsync();
         }
@@ -203,22 +215,88 @@ namespace Blackjack_Trainer
             return sum;
         }
 
-        public int FindWinner() 
+        public int FindWinner()
         {
             int max = 0;
             int winner = 0;
+            Random rand = new Random();
+
             for (int i = 0; i < players.Count; i++)
             {
-                if (players[i].StillIn() && players[i].GetHand() > max) //if player ties with dealer, still dealer wins, winner doesn't update
+                Player cur = players[i];
+                if (cur.StillIn() && cur.GetHand() > max) //if player ties with dealer, still dealer wins, winner doesn't update
                 {
-                    max = players[i].GetHand();
+                    max = cur.GetHand();
                     winner = i;
                 }
+
+                cur.UpdateWinnings(cur.GetHand()+GiveWinnings(cur));
             }
+
+
             UpdateChartWithWinnings();
 
             return winner;
         }
+        public bool Won(Player p) 
+        {
+            Player dealer = players[0];
+            if (dealer.StillIn())
+            {
+                if (p.StillIn())
+                {
+                    return p.GetHand()>dealer.GetHand();//returns true if player has higher hand
+                }
+                else
+                {
+                    return false;//player busted
+                }
+            }
+            else 
+            {
+                if (p.StillIn())
+                {
+                    return true;//dealer busted and player hasn't
+                }
+                else 
+                {
+                    return false;//player busted
+                }
+            }
+            
+        }
+
+        public int GiveWinnings(Player p) 
+        {
+            int w = 0;
+            if(p.IsDealer())//dealer
+            {
+                w = 0;//dealers don't need to earn
+            }
+            else if(p.IsComputer())//player
+            {
+                Random rand = new Random();
+                switch (p.GetStyle())
+                { 
+                    case 0:
+                        w = (200 + 100 * rand.Next(-1, 1)) ;
+                        break;
+                    case 1:
+                        w = (500 + 200 * rand.Next(-1, 1));
+                        break;
+                    case 2:
+                        w = p.GetWinnings() * (Won(p) ? 1 : 0);//can't lose, if win all in
+                        break;
+                }
+            }
+            else
+            {
+                w = clientBet;
+                
+            }
+            return w * (Won(p) ? 1 : -1);
+        }
+
         private void UpdateChartWithWinnings()
         {
             Series series = chartWinnings.Series["Winnings"];
@@ -321,11 +399,6 @@ namespace Blackjack_Trainer
             txtBxScoreBot.Text = "Score: ";
             txtBxScorePlayer.Text = "Score: ";
             await InitializeGameAsync();
-        }
-
-        private void btnSeeAll_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void btnNewSettings_Click(object sender, EventArgs e)
