@@ -36,11 +36,9 @@
             this.btnNext = new System.Windows.Forms.Button();
             this.txtBoxTurn = new System.Windows.Forms.TextBox();
             this.txtBxAdvice = new System.Windows.Forms.TextBox();
-            this.panelPlayersCards = new System.Windows.Forms.Panel();
-            this.txtBxHasStood = new System.Windows.Forms.TextBox();
-            this.txtBxScoreBot = new System.Windows.Forms.TextBox();
             this.panelDealerCards = new System.Windows.Forms.Panel();
             this.panelClientCards = new System.Windows.Forms.Panel();
+            this.btnNewSettings = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.imgTable)).BeginInit();
             this.SuspendLayout();
             // 
@@ -105,37 +103,14 @@
             // 
             // txtBxAdvice
             // 
-            this.txtBxAdvice.ForeColor = System.Drawing.Color.Transparent;
-            this.txtBxAdvice.Location = new System.Drawing.Point(295, 337);
+            this.txtBxAdvice.ForeColor = System.Drawing.Color.Black;
+            this.txtBxAdvice.Location = new System.Drawing.Point(173, 337);
+            this.txtBxAdvice.Multiline = true;
             this.txtBxAdvice.Name = "txtBxAdvice";
-            this.txtBxAdvice.Size = new System.Drawing.Size(483, 22);
+            this.txtBxAdvice.Size = new System.Drawing.Size(605, 135);
             this.txtBxAdvice.TabIndex = 10;
-            // 
-            // panelPlayersCards
-            // 
-            this.panelPlayersCards.BackColor = System.Drawing.Color.Transparent;
-            this.panelPlayersCards.Location = new System.Drawing.Point(52, 317);
-            this.panelPlayersCards.Name = "panelPlayersCards";
-            this.panelPlayersCards.Size = new System.Drawing.Size(200, 155);
-            this.panelPlayersCards.TabIndex = 18;
-            // 
-            // txtBxHasStood
-            // 
-            this.txtBxHasStood.Location = new System.Drawing.Point(52, 511);
-            this.txtBxHasStood.Margin = new System.Windows.Forms.Padding(4);
-            this.txtBxHasStood.Name = "txtBxHasStood";
-            this.txtBxHasStood.Size = new System.Drawing.Size(132, 22);
-            this.txtBxHasStood.TabIndex = 17;
-            this.txtBxHasStood.Text = "Has Stood: ";
-            // 
-            // txtBxScoreBot
-            // 
-            this.txtBxScoreBot.Enabled = false;
-            this.txtBxScoreBot.Location = new System.Drawing.Point(52, 479);
-            this.txtBxScoreBot.Margin = new System.Windows.Forms.Padding(4);
-            this.txtBxScoreBot.Name = "txtBxScoreBot";
-            this.txtBxScoreBot.Size = new System.Drawing.Size(132, 22);
-            this.txtBxScoreBot.TabIndex = 16;
+            this.txtBxAdvice.Text = "hello";
+            this.txtBxAdvice.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // panelDealerCards
             // 
@@ -153,17 +128,25 @@
             this.panelClientCards.Size = new System.Drawing.Size(200, 155);
             this.panelClientCards.TabIndex = 14;
             // 
+            // btnNewSettings
+            // 
+            this.btnNewSettings.Location = new System.Drawing.Point(16, 519);
+            this.btnNewSettings.Name = "btnNewSettings";
+            this.btnNewSettings.Size = new System.Drawing.Size(100, 23);
+            this.btnNewSettings.TabIndex = 20;
+            this.btnNewSettings.Text = "New Settings";
+            this.btnNewSettings.UseVisualStyleBackColor = true;
+            this.btnNewSettings.Click += new System.EventHandler(this.btnNewSettings_Click);
+            // 
             // GameReview
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.ClientSize = new System.Drawing.Size(1067, 554);
+            this.Controls.Add(this.btnNewSettings);
             this.Controls.Add(this.panelClientCards);
             this.Controls.Add(this.panelDealerCards);
-            this.Controls.Add(this.panelPlayersCards);
-            this.Controls.Add(this.txtBxHasStood);
-            this.Controls.Add(this.txtBxScoreBot);
             this.Controls.Add(this.txtBxAdvice);
             this.Controls.Add(this.txtBoxTurn);
             this.Controls.Add(this.btnNext);
@@ -189,10 +172,8 @@
         private System.Windows.Forms.Button btnNext;
         private System.Windows.Forms.TextBox txtBoxTurn;
         private System.Windows.Forms.TextBox txtBxAdvice;
-        private System.Windows.Forms.Panel panelPlayersCards;
-        private System.Windows.Forms.TextBox txtBxHasStood;
-        private System.Windows.Forms.TextBox txtBxScoreBot;
         private System.Windows.Forms.Panel panelDealerCards;
         private System.Windows.Forms.Panel panelClientCards;
+        private System.Windows.Forms.Button btnNewSettings;
     }
 }

@@ -27,9 +27,6 @@ namespace Blackjack_Trainer
             panelClientCards.AutoScroll = true;
 
 
-            panelPlayersCards.AutoScroll = true;
-
-
             panelDealerCards.AutoScroll = true;
 
         }
@@ -137,25 +134,41 @@ namespace Blackjack_Trainer
 
             advice.AppendLine($"Probability of drawing a safe card: {safeCardProbability:F2}%\n");
             // Add more advice based on the game state
-            if (client.GetHand() == 21)
+            if (dealer.GetHand() == 21)
             {
-                advice.AppendLine("You have a blackjack! Stand and hope the dealer doesn't have one too.");
+                advice.AppendLine("The dealer has a blackjack! You should surrender to minimize your losses.");
             }
-            else if (dealer.GetHand() >= client.GetHand())
+            else if (dealer.GetHand() < 21 && dealer.GetHand() >= 17) 
             {
-                advice.AppendLine("Since the dealer has a higher hand than you, the best paths are to either surredner to reduce losses or to hit to hope to win");
+                advice.AppendLine("The dealer has a hand greater than 17. They will stand from here on");
             }
-            else if (dealer.GetHand() <= 17 && client.GetHand() > 17)
+            else
             {
-                advice.AppendLine("Since the dealer has a hand less than 17, they can grow to beat you. You choose if you want to stand, hoping their lower, or hit to be more secure, but also risking busting");
-                if(safeCardProbability > 50)
+                if (client.GetHand() == 21)
                 {
-                    advice.AppendLine("Due to the probabilty of drawing a safe card, it is recommended to stand.");
+                    advice.AppendLine("You have a blackjack! Stand and hope the dealer doesn't have one too.");
                 }
-                else
+                else if (dealer.GetHand() > 21)
                 {
-                    advice.AppendLine("Due to the probabilty of drawing a safe card, it is recommended to hit.");
+                    advice.AppendLine("The dealer has busted! You can stand to avoid busting yourself or try doubling down.");
                 }
+                else if (dealer.GetHand() >= client.GetHand())
+                {
+                    advice.AppendLine("Since the dealer has a higher hand than you, the best paths are to either surredner to reduce losses or to hit to hope to win");
+                }
+                else if (dealer.GetHand() < 17 && client.GetHand() > 17)
+                {
+                    advice.AppendLine("Since the dealer has a hand less than 17, they can grow to beat you. You can choose if you want to stand, hoping their lower, or hit to be more secure, but also risking busting");
+                    if (safeCardProbability > 50)
+                    {
+                        advice.AppendLine("Due to the probabilty of drawing a safe card, it is recommended to stand.");
+                    }
+                    else
+                    {
+                        advice.AppendLine("Due to the probabilty of drawing a safe card, it is recommended to hit.");
+                    }
+                }
+
             }
 
                 //go through every player's every hand to find what cards are currently out of the deck
@@ -187,10 +200,6 @@ namespace Blackjack_Trainer
             {
                 cur = panelClientCards;
             }
-            else
-            {
-                cur = panelPlayersCards;
-            }
             //if the bot, then use this to show cards
 
             foreach (List<Card> hand in player.GetDeck())
@@ -201,12 +210,6 @@ namespace Blackjack_Trainer
                     pic.Location = new Point(10 + (i * cardSpacing), 30);
                     cur.Controls.Add(pic);
                 }
-            }
-            if (player.IsComputer() && !player.IsDealer())
-            {
-                txtBxScoreBot.Text = "Score: " + player.GetHand();
-                txtBxHasStood.Text = "Has Stood: " + player.HasStood();
-                //await PauseAsync(1000);
             }
 
         }
@@ -237,6 +240,14 @@ namespace Blackjack_Trainer
         {
             await Task.Delay(milliseconds);
             // Code to execute after the delay
+        }
+
+        private void btnNewSettings_Click(object sender, EventArgs e)
+        {
+            btnNewSettings.Hide();
+            Start start = new Start();
+            this.Hide(); // Hide the Start form
+            start.Show(); // Show the Game form
         }
     }
 

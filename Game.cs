@@ -376,6 +376,8 @@ namespace Blackjack_Trainer
             ChartArea chartArea = new ChartArea();
             chartWinnings.ChartAreas.Add(chartArea);
 
+            chartArea.AxisX.Minimum = 0;
+
             // Create a new series
             Series series = new Series
             {
