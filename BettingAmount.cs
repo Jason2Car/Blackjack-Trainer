@@ -19,10 +19,10 @@ namespace Blackjack_Trainer
         {
             InitializeComponent();
             totalAmount = total;
-            hScrllBrBetting.Maximum = totalAmount;
+            hScrllBrBetting.Maximum = totalAmount+9;
             hScrllBrBetting.Minimum = 1;
             hScrllBrBetting.Value = 1;
-            txtBxBetting.Text = "Betting: 5";
+            txtBxBetting.Text = "1";
         }
 
         private void txtBxBetting_TextChanged(object sender, EventArgs e)
@@ -42,7 +42,7 @@ namespace Blackjack_Trainer
 
         private void hScrllBrBetting_Scroll(object sender, ScrollEventArgs e)
         {
-            txtBxBetting.Text = "Betting: " + hScrllBrBetting.Value.ToString();
+            txtBxBetting.Text = hScrllBrBetting.Value.ToString();
         }
 
         private void btnSubmit_Click(object sender, EventArgs e)

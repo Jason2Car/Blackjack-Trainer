@@ -65,6 +65,7 @@ namespace Blackjack_Trainer
 
         private async Task InitializeGameAsync()
         {
+            data = new List<Data>();//reset after every game since I'm not sure how to implement
             await StartGameAsync();
         }
         private async Task StartGameAsync()
@@ -301,11 +302,7 @@ namespace Blackjack_Trainer
         {
             Series series = chartWinnings.Series["Winnings"];
             //series.Points.Clear();
-
-            for (int i = 0; i < players.Count; i++)
-            {
-                series.Points.AddXY(i + 1, players[i].GetWinnings());
-            }
+            series.Points.AddXY(series.Points.Count, players.Last().GetWinnings());
         }
         private void DisplayPlayerHand(Player player)
         {
@@ -385,20 +382,44 @@ namespace Blackjack_Trainer
 
         private async void btnNewGame_Click(object sender, EventArgs e)
         {
-            btnNewGame.Hide();
-            btnNewSettings.Hide();
-            btnReview.Hide();
-            foreach (Player i in players)
+            if(players.Last().GetWinnings() <= 0)
             {
-                i.ClearHand();
+                MessageBox.Show("You have no more money. Can't continue.");
             }
-            panelClientCards.Controls.Clear();
-            panelDealerCards.Controls.Clear();
-            panelPlayersCards.Controls.Clear();
-            chartWinnings.Hide();
-            txtBxScoreBot.Text = "Score: ";
-            txtBxScorePlayer.Text = "Score: ";
-            await InitializeGameAsync();
+            else
+            {
+
+                btnNewGame.Hide();
+                btnNewSettings.Hide();
+                btnReview.Hide();
+                foreach (Player i in players)
+                {
+                    i.ClearHand();
+                }
+                panelClientCards.Controls.Clear();
+                panelDealerCards.Controls.Clear();
+                panelPlayersCards.Controls.Clear();
+                chartWinnings.Hide();
+                txtBxScoreBot.Text = "Score: ";
+                txtBxScorePlayer.Text = "Score: ";
+                // Show the BettingAmount form to get the client's bet
+                using (BettingAmount bettingForm = new BettingAmount(players.Last().GetWinnings()))
+                {
+                    if (bettingForm.ShowDialog() == DialogResult.OK)
+                    {
+                        clientBet = bettingForm.BetAmount;
+                    }
+                    else
+                    {
+                        // Handle the case where the user cancels the betting form
+                        MessageBox.Show("Betting was canceled. Exiting the game.");
+                        this.Close();
+                        return;
+                    }
+                }
+                await InitializeGameAsync();
+
+            }
         }
 
         private void btnNewSettings_Click(object sender, EventArgs e)
@@ -458,7 +479,7 @@ namespace Blackjack_Trainer
                 Color = Color.Blue,
                 ChartType = SeriesChartType.Line
             };
-            series.Points.AddXY(0, 0);
+            series.Points.AddXY(0, 1000);
             chartWinnings.Series.Add(series);
         }
         public List<Card> GetCards()
