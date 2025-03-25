@@ -24,9 +24,18 @@ namespace Blackjack_Trainer
             players = p;
             DisplayTurn();
 
+            panelClientCards.AutoScroll = true;
+
+
+            panelPlayersCards.AutoScroll = true;
+
+
+            panelDealerCards.AutoScroll = true;
+
         }
         public void DisplayTurn() {
             MessageBox.Show(data.Count +" "+players.Count+ " " +currentTurn+" "+playerTurn);
+            txtBxAdvice.Text = data[playerTurn * players.Count].GetAdvice();
             if (playerTurn <= 1)
             {
                 btnPrev.Hide();
@@ -97,6 +106,13 @@ namespace Blackjack_Trainer
             DisplayState();
             MessageBox.Show("state displayed");
         }
+        public string GetAdvice() 
+        {
+            String ret = "";
+            //go through every player's every hand to find what cards are currently out of the deck
+            //then using the current deck, find what the probability of the remaining cards won't bust the client or players[players.Count-1]
+            return ret;
+        }
         public void DisplayState() 
         {
             HidePlayerHand(players[players.Count - 1]);
@@ -113,43 +129,38 @@ namespace Blackjack_Trainer
             int xOffset; // Starting X position
             int yOffset;  // Starting Y position
             int cardSpacing = 75; // Space between cards
+            Panel cur = null;
             if (player.IsDealer())
             {
-                xOffset = 300;
-                yOffset = 100;
-                //MessageBox.Show("Dealer hand size: "+player.getDeck()[0].Count);
+                cur = panelDealerCards;
             }
             else if (!player.IsComputer())
             {
-                xOffset = 500;
-                yOffset = 300;
+                cur = panelClientCards;
             }
             else
             {
-                xOffset = 100;
-                yOffset = 300;
+                cur = panelPlayersCards;
             }
             //if the bot, then use this to show cards
 
-            if (!player.IsComputer())
+            foreach (List<Card> hand in player.GetDeck())
             {
-                txtBxScorePlayer.Text = "Score: " + player.GetHand();
-                //txtBxHasStood.Text = "Has Stood: " + player.HasStood();
+                for (int i = 0; i < hand.Count; i++)
+                {
+                    PictureBox pic = hand[i].GetPictureBox();
+                    pic.Location = new Point(10 + (i * cardSpacing), 30);
+                    cur.Controls.Add(pic);
+                }
+            }
+            if (player.IsComputer() && !player.IsDealer())
+            {
+                txtBxScoreBot.Text = "Score: " + player.GetHand();
+                txtBxHasStood.Text = "Has Stood: " + player.HasStood();
                 //await PauseAsync(1000);
             }
 
-                foreach (List<Card> hand in player.GetDeck())
-                {
-                    for (int i = 0; i < hand.Count; i++)
-                    {
-                        PictureBox pic = hand[i].GetPictureBox();
-                        pic.Location = new Point(xOffset + (i * cardSpacing), yOffset);
-                        this.Controls.Add(pic);
-                        pic.BringToFront();
-                    }
-                }
         }
-
         private void HidePlayerHand(Player player)
         {
             foreach (List<Card> hand in player.GetDeck())

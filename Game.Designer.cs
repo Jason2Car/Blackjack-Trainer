@@ -30,11 +30,10 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Game));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.cardImgList = new System.Windows.Forms.ImageList(this.components);
-            this.btnSeeAll = new System.Windows.Forms.Button();
             this.btnStand = new System.Windows.Forms.Button();
             this.btnHit = new System.Windows.Forms.Button();
             this.imgTable = new System.Windows.Forms.PictureBox();
@@ -47,6 +46,9 @@
             this.txtBxHasStood = new System.Windows.Forms.TextBox();
             this.dataSetWinnings = new System.Data.DataSet();
             this.chartWinnings = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.panelClientCards = new System.Windows.Forms.Panel();
+            this.panelPlayersCards = new System.Windows.Forms.Panel();
+            this.panelDealerCards = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.imgTable)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataSetWinnings)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartWinnings)).BeginInit();
@@ -108,17 +110,6 @@
             this.cardImgList.Images.SetKeyName(49, "king_of_diamonds2.png");
             this.cardImgList.Images.SetKeyName(50, "king_of_hearts2.png");
             this.cardImgList.Images.SetKeyName(51, "king_of_spades2.png");
-            // 
-            // btnSeeAll
-            // 
-            this.btnSeeAll.Location = new System.Drawing.Point(889, 511);
-            this.btnSeeAll.Margin = new System.Windows.Forms.Padding(4);
-            this.btnSeeAll.Name = "btnSeeAll";
-            this.btnSeeAll.Size = new System.Drawing.Size(127, 28);
-            this.btnSeeAll.TabIndex = 0;
-            this.btnSeeAll.Text = "See All Hands";
-            this.btnSeeAll.UseVisualStyleBackColor = true;
-            this.btnSeeAll.Click += new System.EventHandler(this.btnSeeAll_Click);
             // 
             // btnStand
             // 
@@ -234,19 +225,43 @@
             // chartWinnings
             // 
             this.chartWinnings.AccessibleName = "chartWinnings";
-            chartArea1.Name = "ChartArea1";
-            this.chartWinnings.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.chartWinnings.Legends.Add(legend1);
-            this.chartWinnings.Location = new System.Drawing.Point(332, 158);
+            chartArea5.Name = "ChartArea1";
+            this.chartWinnings.ChartAreas.Add(chartArea5);
+            legend5.Name = "Legend1";
+            this.chartWinnings.Legends.Add(legend5);
+            this.chartWinnings.Location = new System.Drawing.Point(26, 27);
             this.chartWinnings.Name = "chartWinnings";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.chartWinnings.Series.Add(series1);
+            series5.ChartArea = "ChartArea1";
+            series5.Legend = "Legend1";
+            series5.Name = "Series1";
+            this.chartWinnings.Series.Add(series5);
             this.chartWinnings.Size = new System.Drawing.Size(300, 300);
             this.chartWinnings.TabIndex = 12;
             this.chartWinnings.Text = "chartWinnings";
+            // 
+            // panelClientCards
+            // 
+            this.panelClientCards.BackColor = System.Drawing.Color.Transparent;
+            this.panelClientCards.Location = new System.Drawing.Point(805, 317);
+            this.panelClientCards.Name = "panelClientCards";
+            this.panelClientCards.Size = new System.Drawing.Size(200, 155);
+            this.panelClientCards.TabIndex = 13;
+            // 
+            // panelPlayersCards
+            // 
+            this.panelPlayersCards.BackColor = System.Drawing.Color.Transparent;
+            this.panelPlayersCards.Location = new System.Drawing.Point(52, 317);
+            this.panelPlayersCards.Name = "panelPlayersCards";
+            this.panelPlayersCards.Size = new System.Drawing.Size(200, 155);
+            this.panelPlayersCards.TabIndex = 15;
+            // 
+            // panelDealerCards
+            // 
+            this.panelDealerCards.BackColor = System.Drawing.Color.Transparent;
+            this.panelDealerCards.Location = new System.Drawing.Point(442, 38);
+            this.panelDealerCards.Name = "panelDealerCards";
+            this.panelDealerCards.Size = new System.Drawing.Size(200, 155);
+            this.panelDealerCards.TabIndex = 16;
             // 
             // Game
             // 
@@ -254,6 +269,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.WindowFrame;
             this.ClientSize = new System.Drawing.Size(1067, 554);
+            this.Controls.Add(this.panelDealerCards);
+            this.Controls.Add(this.panelPlayersCards);
+            this.Controls.Add(this.panelClientCards);
             this.Controls.Add(this.chartWinnings);
             this.Controls.Add(this.txtBxHasStood);
             this.Controls.Add(this.txtBxScoreBot);
@@ -264,7 +282,6 @@
             this.Controls.Add(this.btnSplit);
             this.Controls.Add(this.btnHit);
             this.Controls.Add(this.btnStand);
-            this.Controls.Add(this.btnSeeAll);
             this.Controls.Add(this.imgTable);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Game";
@@ -280,7 +297,6 @@
         #endregion
 
         private System.Windows.Forms.ImageList cardImgList;
-        private System.Windows.Forms.Button btnSeeAll;
         private System.Windows.Forms.Button btnStand;
         private System.Windows.Forms.Button btnHit;
         private System.Windows.Forms.PictureBox imgTable;
@@ -293,5 +309,8 @@
         private System.Windows.Forms.TextBox txtBxHasStood;
         private System.Data.DataSet dataSetWinnings;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartWinnings;
+        private System.Windows.Forms.Panel panelClientCards;
+        private System.Windows.Forms.Panel panelPlayersCards;
+        private System.Windows.Forms.Panel panelDealerCards;
     }
 }

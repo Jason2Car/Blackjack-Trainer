@@ -36,6 +36,16 @@ namespace Blackjack_Trainer
             //MessageBox.Show("" + players.Last().stillIn()+" " + players.Last().hasStood());
             //Initialize cards, add one of each suit, total 52
             cards = new List<Card>();
+
+            panelClientCards.AutoScroll = true;
+
+
+            panelPlayersCards.AutoScroll = true;
+
+
+            panelDealerCards.AutoScroll = true;
+
+
             for (int val = 1; val <= 13; val++)
             {
                 for (int suit = 0; suit < 4; suit++) 
@@ -57,6 +67,7 @@ namespace Blackjack_Trainer
             {
                 txtBxScoreBot.Hide();
                 txtBxHasStood.Hide();
+                panelPlayersCards.Hide();
             }
             await PlayGameAsync();
             //MessageBox.Show("Player stillin: " + players.Last().stillIn() + " Player has Stood" + players.Last().hasStood());
@@ -233,24 +244,30 @@ namespace Blackjack_Trainer
             int xOffset; // Starting X position
             int yOffset;  // Starting Y position
             int cardSpacing = 75; // Space between cards
+            Panel cur = null;
             if (player.IsDealer())
             {
-                xOffset = 300;
-                yOffset = 100;
-                //MessageBox.Show("Dealer hand size: "+player.getDeck()[0].Count);
+                cur = panelDealerCards;
             }
             else if (!player.IsComputer())
             {
-                xOffset = 500;
-                yOffset = 300;
+                cur = panelClientCards;
             }
             else
             {
-                xOffset = 100;
-                yOffset = 300;
+                cur = panelPlayersCards;
             }
             //if the bot, then use this to show cards
 
+            foreach (List<Card> hand in player.GetDeck())
+            {
+                for (int i = 0; i < hand.Count; i++)
+                {
+                    PictureBox pic = hand[i].GetPictureBox();
+                    pic.Location = new Point(10 + (i * cardSpacing), 30);
+                    cur.Controls.Add(pic);
+                }
+            }
             if (player.IsComputer() && !player.IsDealer())
             {
                 txtBxScoreBot.Text = "Score: " + player.GetHand();
@@ -258,16 +275,6 @@ namespace Blackjack_Trainer
                 //await PauseAsync(1000);
             }
 
-            foreach (List<Card> hand in player.GetDeck())
-            {
-                for (int i = 0; i < hand.Count; i++)
-                {
-                    PictureBox pic = hand[i].GetPictureBox();
-                    pic.Location = new Point(xOffset + (i * cardSpacing), yOffset);
-                    this.Controls.Add(pic);
-                    pic.BringToFront();
-                }
-            }
         }
 
         private void HidePlayerHand(Player player)
@@ -311,9 +318,13 @@ namespace Blackjack_Trainer
             btnReview.Hide();
             foreach (Player i in players)
             {
-                HidePlayerHand(i);
                 i.ClearHand();
             }
+            panelClientCards.Controls.Clear();
+            panelDealerCards.Controls.Clear();
+            panelPlayersCards.Controls.Clear();
+            chartWinnings.Hide();
+            txtBxScoreBot.Text = "Score: ";
             txtBxScorePlayer.Text = "Score: ";
             await InitializeGameAsync();
         }
@@ -381,5 +392,6 @@ namespace Blackjack_Trainer
             series.Points.AddXY(0, 0);
             chartWinnings.Series.Add(series);
         }
+
     }
 }

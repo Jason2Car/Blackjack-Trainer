@@ -29,25 +29,20 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GameReview));
-            this.btnSeeAll = new System.Windows.Forms.Button();
             this.txtExplain = new System.Windows.Forms.TextBox();
             this.imgTable = new System.Windows.Forms.PictureBox();
             this.txtBxScorePlayer = new System.Windows.Forms.TextBox();
             this.btnPrev = new System.Windows.Forms.Button();
             this.btnNext = new System.Windows.Forms.Button();
             this.txtBoxTurn = new System.Windows.Forms.TextBox();
+            this.txtBxAdvice = new System.Windows.Forms.TextBox();
+            this.panelPlayersCards = new System.Windows.Forms.Panel();
+            this.txtBxHasStood = new System.Windows.Forms.TextBox();
+            this.txtBxScoreBot = new System.Windows.Forms.TextBox();
+            this.panelDealerCards = new System.Windows.Forms.Panel();
+            this.panelClientCards = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.imgTable)).BeginInit();
             this.SuspendLayout();
-            // 
-            // btnSeeAll
-            // 
-            this.btnSeeAll.Location = new System.Drawing.Point(889, 511);
-            this.btnSeeAll.Margin = new System.Windows.Forms.Padding(4);
-            this.btnSeeAll.Name = "btnSeeAll";
-            this.btnSeeAll.Size = new System.Drawing.Size(127, 28);
-            this.btnSeeAll.TabIndex = 0;
-            this.btnSeeAll.Text = "See All Hands";
-            this.btnSeeAll.UseVisualStyleBackColor = true;
             // 
             // txtExplain
             // 
@@ -108,19 +103,74 @@
             this.txtBoxTurn.TabIndex = 9;
             this.txtBoxTurn.Text = "Turn: ";
             // 
+            // txtBxAdvice
+            // 
+            this.txtBxAdvice.ForeColor = System.Drawing.Color.Transparent;
+            this.txtBxAdvice.Location = new System.Drawing.Point(295, 337);
+            this.txtBxAdvice.Name = "txtBxAdvice";
+            this.txtBxAdvice.Size = new System.Drawing.Size(483, 22);
+            this.txtBxAdvice.TabIndex = 10;
+            // 
+            // panelPlayersCards
+            // 
+            this.panelPlayersCards.BackColor = System.Drawing.Color.Transparent;
+            this.panelPlayersCards.Location = new System.Drawing.Point(52, 317);
+            this.panelPlayersCards.Name = "panelPlayersCards";
+            this.panelPlayersCards.Size = new System.Drawing.Size(200, 155);
+            this.panelPlayersCards.TabIndex = 18;
+            // 
+            // txtBxHasStood
+            // 
+            this.txtBxHasStood.Location = new System.Drawing.Point(52, 511);
+            this.txtBxHasStood.Margin = new System.Windows.Forms.Padding(4);
+            this.txtBxHasStood.Name = "txtBxHasStood";
+            this.txtBxHasStood.Size = new System.Drawing.Size(132, 22);
+            this.txtBxHasStood.TabIndex = 17;
+            this.txtBxHasStood.Text = "Has Stood: ";
+            // 
+            // txtBxScoreBot
+            // 
+            this.txtBxScoreBot.Enabled = false;
+            this.txtBxScoreBot.Location = new System.Drawing.Point(52, 479);
+            this.txtBxScoreBot.Margin = new System.Windows.Forms.Padding(4);
+            this.txtBxScoreBot.Name = "txtBxScoreBot";
+            this.txtBxScoreBot.Size = new System.Drawing.Size(132, 22);
+            this.txtBxScoreBot.TabIndex = 16;
+            // 
+            // panelDealerCards
+            // 
+            this.panelDealerCards.BackColor = System.Drawing.Color.Transparent;
+            this.panelDealerCards.Location = new System.Drawing.Point(442, 38);
+            this.panelDealerCards.Name = "panelDealerCards";
+            this.panelDealerCards.Size = new System.Drawing.Size(200, 155);
+            this.panelDealerCards.TabIndex = 19;
+            // 
+            // panelClientCards
+            // 
+            this.panelClientCards.BackColor = System.Drawing.Color.Transparent;
+            this.panelClientCards.Location = new System.Drawing.Point(805, 317);
+            this.panelClientCards.Name = "panelClientCards";
+            this.panelClientCards.Size = new System.Drawing.Size(200, 155);
+            this.panelClientCards.TabIndex = 14;
+            // 
             // GameReview
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.ClientSize = new System.Drawing.Size(1067, 554);
+            this.Controls.Add(this.panelClientCards);
+            this.Controls.Add(this.panelDealerCards);
+            this.Controls.Add(this.panelPlayersCards);
+            this.Controls.Add(this.txtBxHasStood);
+            this.Controls.Add(this.txtBxScoreBot);
+            this.Controls.Add(this.txtBxAdvice);
             this.Controls.Add(this.txtBoxTurn);
             this.Controls.Add(this.btnNext);
             this.Controls.Add(this.btnPrev);
             this.Controls.Add(this.txtBxScorePlayer);
             this.Controls.Add(this.imgTable);
             this.Controls.Add(this.txtExplain);
-            this.Controls.Add(this.btnSeeAll);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "GameReview";
@@ -132,13 +182,17 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Button btnSeeAll;
         private System.Windows.Forms.TextBox txtExplain;
         private System.Windows.Forms.PictureBox imgTable;
         private System.Windows.Forms.TextBox txtBxScorePlayer;
         private System.Windows.Forms.Button btnPrev;
         private System.Windows.Forms.Button btnNext;
         private System.Windows.Forms.TextBox txtBoxTurn;
+        private System.Windows.Forms.TextBox txtBxAdvice;
+        private System.Windows.Forms.Panel panelPlayersCards;
+        private System.Windows.Forms.TextBox txtBxHasStood;
+        private System.Windows.Forms.TextBox txtBxScoreBot;
+        private System.Windows.Forms.Panel panelDealerCards;
+        private System.Windows.Forms.Panel panelClientCards;
     }
 }

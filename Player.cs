@@ -23,18 +23,20 @@ namespace Blackjack_Trainer
         protected bool stood = false;
         protected bool isComputerControlled = false;
         protected bool isDealer = false;
+        protected List<bool> hasAce = new List<bool>();
         public Player(int d, float s)
         {
             deck.Add(new List<Card>());
+            this.hasAce.Add(false);
             diff = d;
             style = s;
         }
         public Player(Player other) 
         {
-            this.deck = new List<List<Card>>();
             for (int h = 0; h < other.deck.Count; h++)
             {
                 this.deck.Add(new List<Card>());
+                this.hasAce.Add(false);
                 foreach (Card c in other.deck[h])
                 {
                     this.deck[h].Add(new Card(c.GetVal(), c.GetSuit(), c.GetPictureBox().Image));
@@ -111,12 +113,13 @@ namespace Blackjack_Trainer
         public Card AddCard(int hand, Card card)
         {
             deck[hand].Add(card);
-            if (card.GetVal() == 1)
+            if (!hasAce[hand] && card.GetVal() == 1)
             {
                 handVal += 1;
                 handValAce += 11;
+                hasAce[hand] = true;
             }
-            else
+            else 
             {
                 handVal += card.GetVal();
                 handValAce += card.GetVal();
@@ -154,6 +157,8 @@ namespace Blackjack_Trainer
         {
             deck.Clear();
             deck.Add(new List<Card>());
+            hasAce.Clear();
+            hasAce.Add(false);
             handVal = 0;
             handValAce = 0;
             stood = false;
