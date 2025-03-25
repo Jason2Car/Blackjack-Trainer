@@ -22,7 +22,7 @@ namespace Blackjack_Trainer
             isComputerControlled = false;
             isDealer = false;
         }
-        public override async Task<Data> TurnAsync(Game g)
+        public override async Task<Data> TurnAsync(List<Card> deckUsed)
         {
             Data ret = new Data(this, null, -1);//if they bust, they basically stood, we check for stillIn() anyways before
             if (StillIn() && !stood)
@@ -33,7 +33,7 @@ namespace Blackjack_Trainer
                     switch (btnPressed)
                     {
                         case 1:
-                            Card card = g.deck.Pop();
+                            Card card = deckUsed.Pop();
                             ret = new Data(this, AddCard(0, card), btnPressed);
                             decisionMade = true;
                             MessageBox.Show("Hit");

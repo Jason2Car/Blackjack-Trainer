@@ -21,7 +21,7 @@ namespace Blackjack_Trainer
             isDealer = false;
         }
 
-        public override async Task<Data> TurnAsync(Game g)
+        public override async Task<Data> TurnAsync(List<Card> deckUsed)
         {
             Data ret = new Data(this, null, -1);//if they bust, they basically stood, we check for stillIn() anyways before
             if (StillIn() && !HasStood())
@@ -29,7 +29,7 @@ namespace Blackjack_Trainer
                 Random rand = new Random();
                 if (EvalRisk(g) + GetHand() <= 21 + GetDifficulty() * rand.NextDouble()) // if the player should hit
                 {
-                    Card card = g.deck.Pop();
+                    Card card = deckUsed.Pop();
                     ret = new Data(this, AddCard(0, card), 1);
                 }
                 else // if the player should stand

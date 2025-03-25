@@ -152,7 +152,7 @@ namespace Blackjack_Trainer
         {
             winnings = update;
         }
-        public abstract Task<Data> TurnAsync(Game g);
+        public abstract Task<Data> TurnAsync(List<Card> deckUsed);
 
         public abstract int Type();
 

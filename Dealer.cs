@@ -21,14 +21,14 @@ namespace Blackjack_Trainer
             isComputerControlled = true;
         }
 
-        public override async Task<Data> TurnAsync(Game g)
+        public override async Task<Data> TurnAsync(List<Card> deckUsed)
         {
             Data ret = new Data(this, null, -1);//if they bust, they basically stood, we check for stillIn() anyways before
             if (StillIn() && !HasStood())
             {
                 if (GetHand() < 17)
                 {
-                    Card card = g.deck.Pop();
+                    Card card = deckUsed.Pop();
                     ret = new Data(this, AddCard(0, card), 1); // add card to dealer's hand
                 }
                 else

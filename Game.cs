@@ -32,6 +32,7 @@ namespace Blackjack_Trainer
         private Player conservativeDealer;
         private bool riskyToggle = false;//toggles on and off when order changes due to different actions
         private bool conservativeToggle = false;
+        private Stack<List<Card>> cardsUsed = new Stack<List<Card>>();
 
         //private bool btnSelected = false;
         public Game(List<Player> p)
@@ -92,18 +93,30 @@ namespace Blackjack_Trainer
                     simulatedPlayers[i] = players[i];
                 }
             }
-
+            List<Card> simulatedDeck = cardsUsed.Pop();
             while(StillPlay(simulatedPlayers))
             {
                 for (int i = 0; i < simulatedPlayers.Count; i++)
                 {
+                    if(simulatedDeck.Count == 0)//if current deck is empty
+                    {
+                        if(cardsUsed.Count != 0)//if there're cards to draw from
+                        {
+                            simulatedDeck = cardsUsed.Pop();
+                        }
+                        else//no cards from past so now need to make up some
+                        {
+                            simulatedDeck = NewDeck();
+                        }
+                    }
                     Player cur = simulatedPlayers[i];
                     if (cur.StillIn() && !cur.HasStood())
                     {
-                        cur.TurnAsync(this);
+                        cur.TurnAsync(simulatedDeck);//should go through all turns without wait
                     }
                 }
             }
+            FindWinner();//should update all the players with their winnings
             return simulatedPlayers.Last().GetWinnings(); //return the winnings of the simulated client
         }
         private async Task StartGameAsync()
@@ -137,13 +150,15 @@ namespace Blackjack_Trainer
         }
         public async Task PlayGameAsync()
         {
-            NewDeck();
+            deck = NewDeck();
+            cardsUsed.Push(CopyDeck());
             //await PauseAsync(1000);
             foreach (Player cur in players) // distributing cards
             {
                 if (deck.Count<=0) 
                 {
-                    NewDeck();
+                    deck = NewDeck();
+                    cardsUsed.Push(CopyDeck());
                 }
                 Card added = cur.AddCard(0, deck.Pop());
                 inHands.Add(added);
@@ -203,7 +218,7 @@ namespace Blackjack_Trainer
                     //now i could simulate a whole game with the client replaced by a computer controlled player but that's not possible in this timeframe
                     
                     List<List<Card>> temp = cur.CopyDeck();
-                    Data result = await cur.TurnAsync(this);
+                    Data result = await cur.TurnAsync(deck);
                     data.Add(result);
                     btnHit.Hide();
                     btnStand.Hide();
@@ -247,17 +262,17 @@ namespace Blackjack_Trainer
 
         public Stack<Card> NewDeck() 
         {
-            deck = new Stack<Card>();
+            temp = new Stack<Card>();
             List<Card> tempCards = new List<Card>(NewCards());
             Random rand = new Random();
             while (tempCards.Count>0)
             {
                 int pos = (int)(tempCards.Count * rand.NextDouble());
-                deck.Push(tempCards[pos]);
+                temp.Push(tempCards[pos]);
                 tempCards.RemoveAt(pos);
             }
             //MessageBox.Show("New deck added");
-            return deck;
+            return temp;
         }
 
         public Stack<Card> CopyDeck()
@@ -267,7 +282,7 @@ namespace Blackjack_Trainer
             {
                 copy.Push(card); //copy the deck
             }
-            return copy;
+            return copy;//this copy should be unassociated or independent with deck
         }
 
         public int HandSum() 
@@ -367,6 +382,13 @@ namespace Blackjack_Trainer
             Series series = chartWinnings.Series["Winnings"];
             //series.Points.Clear();
             series.Points.AddXY(series.Points.Count, players.Last().GetWinnings());
+
+            Series series = chartWinnings.Series["Conservative"];
+            series.Points.AddXY(series.Points.Count, GameSimulation(new Player(1,0)));
+            
+            Series series = chartWinnings.Series["Risky"];
+            series.Points.AddXY(series.Points.Count, GameSimulation(new Player(1,1)));
+            
         }
         private void DisplayPlayerHand(Player player)
         {
