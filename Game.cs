@@ -26,6 +26,10 @@ namespace Blackjack_Trainer
         private List<int> winings = new List<int>();
         private List<Data> data = new List<Data>();
         private int clientBet;
+        private int riskyHandVal;
+        private int conservativeHandVal;
+        private Player riskyClient;
+        private Player conservativeClient;
 
         //private bool btnSelected = false;
         public Game(List<Player> p)
@@ -37,7 +41,8 @@ namespace Blackjack_Trainer
             //MessageBox.Show("" + players.Last().stillIn()+" " + players.Last().hasStood());
             //Initialize cards, add one of each suit, total 52
             cards = GetCards();
-
+            conservativeClient = new ComputerControlledPlayer(1,0);
+            riskyClient = new ComputerControlledPlayer(1,1);
             panelClientCards.AutoScroll = true;
             panelPlayersCards.AutoScroll = true;
             panelDealerCards.AutoScroll = true;
@@ -231,7 +236,7 @@ namespace Blackjack_Trainer
                     winner = i;
                 }
 
-                cur.UpdateWinnings(cur.GetHand()+GiveWinnings(cur));
+                cur.UpdateWinnings(cur.GetHand()+GiveWinnings(cur) * (Won(p) ? 1 : -1));
             }
 
 
@@ -295,7 +300,7 @@ namespace Blackjack_Trainer
                 w = clientBet;
                 
             }
-            return w * (Won(p) ? 1 : -1);
+            return w;
         }
 
         private void UpdateChartWithWinnings()
@@ -308,10 +313,8 @@ namespace Blackjack_Trainer
         {
             //if time, use directory to preload image boxes and can use card
             //values to get which image to show, then no need to hold images in cards
+            
             // Display current hand
-
-            int xOffset; // Starting X position
-            int yOffset;  // Starting Y position
             int cardSpacing = 75; // Space between cards
             Panel cur = null;
             if (player.IsDealer())
@@ -473,14 +476,30 @@ namespace Blackjack_Trainer
             chartArea.AxisX.Minimum = 0;
 
             // Create a new series
-            Series series = new Series
+            Series normal = new Series
             {
                 Name = "Winnings",
+                Color = Color.Green,
+                ChartType = SeriesChartType.Line
+            };
+            Series risky = new Series
+            {
+                Name = "Risky",
+                Color = Color.Red,
+                ChartType = SeriesChartType.Line
+            };
+            Series conservative = new Series
+            {
+                Name = "Conservative",
                 Color = Color.Blue,
                 ChartType = SeriesChartType.Line
             };
-            series.Points.AddXY(0, 1000);
-            chartWinnings.Series.Add(series);
+            normal.Points.AddXY(0, 1000);
+            risky.Points.AddXY(0,1000);
+            conservative.Points.AddXY(0,1000);
+            chartWinnings.Series.Add(normal);
+            chartWinnings.Series.Add(risky);
+            chartWinnings.Series.Add(conservative);
         }
         public List<Card> GetCards()
         {
