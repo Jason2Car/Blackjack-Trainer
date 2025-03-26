@@ -108,12 +108,12 @@ namespace Blackjack_Trainer
             }
             currentTurn = playerTurn;
             txtBoxTurn.Text = "Turn: " + (currentTurn + 1);
+            txtBxScorePlayer.Text = "Score: " + players.Last().GetHand();
             DisplayState();
             MessageBox.Show("state displayed");
         }
         public string GetAdvice() 
         {
-            String ret = "";
             StringBuilder advice = new StringBuilder();
             List<Card> remainingDeck = new List<Card>(game.CopyDeck());
             MessageBox.Show(""+remainingDeck.Count());

@@ -26,13 +26,7 @@ namespace Blackjack_Trainer
         private List<int> winings = new List<int>();
         private List<Data> data = new List<Data>();
         private int clientBet;
-        private Player riskyClient;
-        private Player riskyDealer;
-        private Player conservativeClient;
-        private Player conservativeDealer;
-        private bool riskyToggle = false;//toggles on and off when order changes due to different actions
-        private bool conservativeToggle = false;
-        private Stack<List<Card>> cardsUsed = new Stack<List<Card>>();
+        private Stack<Stack<Card>> cardsUsed = new Stack<Stack<Card>>();
 
         //private bool btnSelected = false;
         public Game(List<Player> p)
@@ -44,10 +38,6 @@ namespace Blackjack_Trainer
             //MessageBox.Show("" + players.Last().stillIn()+" " + players.Last().hasStood());
             //Initialize cards, add one of each suit, total 52
             cards = NewCards();
-            conservativeClient = new ComputerControlledPlayer(1,0);
-            riskyClient = new ComputerControlledPlayer(1,1);
-            conservativeDealer = new Dealer();
-            riskyDealer = new Dealer();
             panelClientCards.AutoScroll = true;
             panelPlayersCards.AutoScroll = true;
             panelDealerCards.AutoScroll = true;
@@ -86,23 +76,24 @@ namespace Blackjack_Trainer
             {
                 if (i == players.Count - 1) //client
                 {
-                    simulatedPlayers[i] = replacement;
+                    simulatedPlayers.Add(replacement);
                 }
                 else
                 {
-                    simulatedPlayers[i] = players[i];
+                    simulatedPlayers.Add(players[i]);
                 }
             }
-            List<Card> simulatedDeck = cardsUsed.Pop();
+            Stack<Stack<Card>> simulatedDecks = DeepCopyStack(cardsUsed);
+            Stack<Card> simulatedDeck = simulatedDecks.Pop();
             while(StillPlay(simulatedPlayers))
             {
                 for (int i = 0; i < simulatedPlayers.Count; i++)
                 {
                     if(simulatedDeck.Count == 0)//if current deck is empty
                     {
-                        if(cardsUsed.Count != 0)//if there're cards to draw from
+                        if(simulatedDecks.Count != 0)//if there're cards to draw from
                         {
-                            simulatedDeck = cardsUsed.Pop();
+                            simulatedDeck = simulatedDecks.Pop();
                         }
                         else//no cards from past so now need to make up some
                         {
@@ -116,7 +107,7 @@ namespace Blackjack_Trainer
                     }
                 }
             }
-            FindWinner();//should update all the players with their winnings
+            FindWinner(simulatedPlayers);//should update all the players with their winnings
             return simulatedPlayers.Last().GetWinnings(); //return the winnings of the simulated client
         }
         private async Task StartGameAsync()
@@ -130,7 +121,8 @@ namespace Blackjack_Trainer
             await PlayGameAsync();
             //MessageBox.Show("Player stillin: " + players.Last().stillIn() + " Player has Stood" + players.Last().hasStood());
             //MessageBox.Show("Player hand: " + players.Last().getHand());
-            int winner = FindWinner();
+            int winner = FindWinner(players);
+            UpdateChartWithWinnings();
             chartWinnings.Show();
             if (winner == players.Count - 1)
             {
@@ -152,6 +144,7 @@ namespace Blackjack_Trainer
         {
             deck = NewDeck();
             cardsUsed.Push(CopyDeck());
+            //MessageBox.Show(""+cardsUsed.Count);
             //await PauseAsync(1000);
             foreach (Player cur in players) // distributing cards
             {
@@ -162,18 +155,9 @@ namespace Blackjack_Trainer
                 }
                 Card added = cur.AddCard(0, deck.Pop());
                 inHands.Add(added);
-                if(!cur.IsComputer())//if client
-                {
-                    riskyClient.AddCard(0,added);
-                    conservativeClient.AddCard(0,added);
-                }
+                
                 added = cur.AddCard(0, deck.Pop());
                 inHands.Add(added);
-                if(!cur.IsComputer())//if client
-                {
-                    riskyClient.AddCard(0,added);
-                    conservativeClient.AddCard(0,added);
-                }
 
 
 
@@ -262,7 +246,7 @@ namespace Blackjack_Trainer
 
         public Stack<Card> NewDeck() 
         {
-            temp = new Stack<Card>();
+            Stack<Card> temp = new Stack<Card>();
             List<Card> tempCards = new List<Card>(NewCards());
             Random rand = new Random();
             while (tempCards.Count>0)
@@ -295,15 +279,14 @@ namespace Blackjack_Trainer
             return sum;
         }
 
-        public int FindWinner()
+        public int FindWinner(List<Player> played)
         {
             int max = 0;
             int winner = 0;
-            Random rand = new Random();
 
             for (int i = 0; i < players.Count; i++)
             {
-                Player cur = players[i];
+                Player cur = played[i];
                 if (cur.StillIn() && cur.GetHand() > max) //if player ties with dealer, still dealer wins, winner doesn't update
                 {
                     max = cur.GetHand();
@@ -314,7 +297,8 @@ namespace Blackjack_Trainer
             }
 
 
-            UpdateChartWithWinnings();
+            //UpdateChartWithWinnings();
+            //MessageBox.Show(""+players.Last().GetWinnings());
 
             return winner;
         }
@@ -353,18 +337,18 @@ namespace Blackjack_Trainer
             {
                 w = 0;//dealers don't need to earn
             }
-            else if(p.IsComputer())//player
+            else if(p.IsComputer())
             {
                 Random rand = new Random();
                 switch (p.GetStyle())
                 { 
-                    case 0:
-                        w = (200 + 100 * rand.Next(-1, 1)) ;
+                    case 0://conservative
+                        w = (100 + (int)(200 * rand.NextDouble())) ;
                         break;
-                    case 1:
-                        w = (500 + 200 * rand.Next(-1, 1));
+                    case 1://risky
+                        w = (300 + (int)(400 * rand.NextDouble()));
                         break;
-                    case 2:
+                    case 2://allseeing
                         w = p.GetWinnings() * (Won(p) ? 1 : 0);//can't lose, if win all in
                         break;
                 }
@@ -372,6 +356,7 @@ namespace Blackjack_Trainer
             else
             {
                 w = clientBet;
+                MessageBox.Show("you winning"+w);
                 
             }
             return w;
@@ -379,16 +364,22 @@ namespace Blackjack_Trainer
 
         private void UpdateChartWithWinnings()
         {
-            Series series = chartWinnings.Series["Winnings"];
+            Series series = chartWinnings.Series["You"];
             //series.Points.Clear();
             series.Points.AddXY(series.Points.Count, players.Last().GetWinnings());
+            MessageBox.Show("You" + players.Last().GetWinnings());
 
-            Series series = chartWinnings.Series["Conservative"];
-            series.Points.AddXY(series.Points.Count, GameSimulation(new Player(1,0)));
+            series = chartWinnings.Series["Conservative"];
+            int outcome = GameSimulation(new ComputerControlledPlayer(1, 0));
+            series.Points.AddXY(series.Points.Count, outcome);
+            MessageBox.Show("risky"+outcome);
             
-            Series series = chartWinnings.Series["Risky"];
-            series.Points.AddXY(series.Points.Count, GameSimulation(new Player(1,1)));
-            
+            series = chartWinnings.Series["Risky"];
+            outcome = GameSimulation(new ComputerControlledPlayer(1, 1));
+            series.Points.AddXY(series.Points.Count, outcome);
+            MessageBox.Show("cons" + outcome);
+
+
         }
         private void DisplayPlayerHand(Player player)
         {
@@ -559,7 +550,7 @@ namespace Blackjack_Trainer
             // Create a new series
             Series normal = new Series
             {
-                Name = "Winnings",
+                Name = "You",
                 Color = Color.Green,
                 ChartType = SeriesChartType.Line
             };
@@ -594,5 +585,16 @@ namespace Blackjack_Trainer
             }
             return ret;
         }
+        private Stack<Stack<Card>> DeepCopyStack(Stack<Stack<Card>> original)
+        {
+            Stack<Stack<Card>> copy = new Stack<Stack<Card>>(original.Count);
+            foreach (var stack in original)
+            {
+                Stack<Card> newStack = new Stack<Card>(stack.ToArray()); // Create a new stack with the same elements
+                copy.Push(newStack);
+            }
+            return copy; // Return the copy directly
+        }
+
     }
 }

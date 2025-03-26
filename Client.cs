@@ -22,7 +22,7 @@ namespace Blackjack_Trainer
             isComputerControlled = false;
             isDealer = false;
         }
-        public override async Task<Data> TurnAsync(List<Card> deckUsed)
+        public override async Task<Data> TurnAsync(Stack<Card> deckUsed)
         {
             Data ret = new Data(this, null, -1);//if they bust, they basically stood, we check for stillIn() anyways before
             if (StillIn() && !stood)

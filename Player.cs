@@ -91,17 +91,18 @@ namespace Blackjack_Trainer
         {
             return (handVal <= 21 || handValAce <= 21);//either is <=21 then return true means still in, false means busted
         }
-        public int EvalRisk(Game g) 
+        public int EvalRisk(Stack<Card> deckUsed) 
         {
             if (style == 2)
             {
-                return g.CopyDeck().Pop().GetVal();
+                return deckUsed.Pop().GetVal();
             }
             else
             {
                 try
                 {
-                    return (340 - g.HandSum()) / (g.CopyDeck().Count);
+
+                    return deckUsed.Sum(card => card.GetVal()) / (deckUsed.Count);
                 }
                 catch (Exception e) 
                 {
@@ -152,7 +153,7 @@ namespace Blackjack_Trainer
         {
             winnings = update;
         }
-        public abstract Task<Data> TurnAsync(List<Card> deckUsed);
+        public abstract Task<Data> TurnAsync(Stack<Card> deckUsed);
 
         public abstract int Type();
 
