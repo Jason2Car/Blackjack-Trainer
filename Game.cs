@@ -160,19 +160,26 @@ namespace Blackjack_Trainer
                 inHands.Add(added);
 
 
-
                 Player copy = null;
                 switch (cur.Type())
                 {
                     case 0:
-                        copy = new Dealer(cur);
+                        copy = new Dealer();
                         break;
                     case 1:
-                        copy = new ComputerControlledPlayer(cur);
+                        copy = new ComputerControlledPlayer(cur.GetDifficulty(),cur.GetStyle());
                         break;
                     case 2:
-                        copy = new Client(cur);
+                        copy = new Client();
                         break;
+                }
+
+                foreach (List<Card> hand in cur.GetDeck())
+                {
+                    foreach (Card card in hand)
+                    {
+                        copy.AddCard(0, card);
+                    }
                 }
                 copyOfPlayers.Add(copy);
             }

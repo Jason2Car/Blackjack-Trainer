@@ -24,17 +24,16 @@ namespace Blackjack_Trainer
             game = g;
             data = d;
             players = p;
-            DisplayTurn();
 
             panelClientCards.AutoScroll = true;
 
 
             panelDealerCards.AutoScroll = true;
+            DisplayTurn();
 
         }
         public void DisplayTurn() {
-            MessageBox.Show(data.Count +" "+players.Count+ " " +currentTurn+" "+playerTurn);
-            txtBxAdvice.Text = GetAdvice();
+            //MessageBox.Show(data.Count +" "+players.Count+ " " +currentTurn+" "+playerTurn);
             if (playerTurn <= 0)
             {
                 btnPrev.Hide();
@@ -61,7 +60,14 @@ namespace Blackjack_Trainer
                         switch (cur.GetAction())
                         {
                             case -1://bust
-                                txtBxAdvice.AppendText("\n This turn you busted");
+                                if (cur.GetPlayer().HasStood())
+                                {
+                                    txtBxAdvice.AppendText("\n This turn you stood");
+                                }
+                                else 
+                                {
+                                    txtBxAdvice.AppendText("\n This turn you busted");
+                                }
                                 break;
                             case 1://hit
                                 players[curPlayer].AddCard(0, cur.GetCard());
@@ -106,20 +112,22 @@ namespace Blackjack_Trainer
                 }
 
             }
+            txtBxAdvice.Text = GetAdvice();
             currentTurn = playerTurn;
             txtBoxTurn.Text = "Turn: " + (currentTurn + 1);
             txtBxScorePlayer.Text = "Score: " + players.Last().GetHand();
             DisplayState();
-            MessageBox.Show("state displayed");
+            //MessageBox.Show("state displayed");
         }
         public string GetAdvice() 
         {
             StringBuilder advice = new StringBuilder();
-            List<Card> remainingDeck = new List<Card>(game.CopyDeck());
-            MessageBox.Show(""+remainingDeck.Count());
+            List<Card> remainingDeck = new List<Card>(game.NewCards());
+            //MessageBox.Show(""+remainingDeck.Count());
             Player client = players.Last(); // Assuming the client is the last player
             Player dealer = players[0]; // Assuming the dealer is the first player
             int clientHandValue = client.GetHand();
+            MessageBox.Show("" + clientHandValue);
 
 
             foreach (Player player in players)
@@ -128,23 +136,46 @@ namespace Blackjack_Trainer
                 {
                     foreach (Card card in hand)
                     {
-                        if (!remainingDeck.Remove(card)) 
+                        bool removed = false;
+                        for (int i = 0; i < remainingDeck.Count; i++)
                         {
-                            remainingDeck.AddRange(game.CopyDeck());//add another deck
+                            if (card.GetVal() == remainingDeck[i].GetVal())
+                            {
+                                //MessageBox.Show(" " + card.GetVal() + " " + remainingDeck[i].GetVal());
+                                remainingDeck.RemoveAt(i);//they match
+                                removed = true;
+                                break;
+                                
+                            }
+                        }
+                        if (!removed) 
+                        {
+
+                            //MessageBox.Show(" remaining deck: " + remainingDeck.Count);
+                            remainingDeck.AddRange(game.NewCards());//add another deck
                             remainingDeck.Remove(card); //try again
                         }
                     }
                 }
             }
+            //MessageBox.Show(" remaining deck: " + remainingDeck.Count);
             // Calculate the probability of drawing a card that won't bust the client
-            int safeCards = remainingDeck.Count(card => (clientHandValue + card.GetVal() <= 21));
-            double safeCardProbability = remainingDeck.Count > 0 ? (double)safeCards / remainingDeck.Count * 100 : 0;
+            int safeCards = 0;
+            foreach (Card card in remainingDeck) 
+            {
+                if (card.GetVal() + clientHandValue <= 21) 
+                {
+                    safeCards++;
+                }
+            }
+            MessageBox.Show("safe cards: " + safeCards + " remaining deck: " + remainingDeck.Count);
+            double safeCardProbability = remainingDeck.Count > 0 ? (double)safeCards / remainingDeck.Count * 100 : 340.0/52;
 
             //double safeCardProbability = (double)safeCards / remainingDeck.Count * 100;
-
             advice.AppendLine($"Probability of drawing a safe card: {safeCardProbability:F2}%\n");
+
             // Add more advice based on the game state
-            if (client.GetHand() > 21) 
+            if (client.GetHand() > 21)
             {
                 advice.AppendLine("You busted so there's nothing you can do");
             }
@@ -152,7 +183,7 @@ namespace Blackjack_Trainer
             {
                 advice.AppendLine("The dealer has a blackjack! You should surrender to minimize your losses.");
             }
-            else if (dealer.GetHand() < 21 && dealer.GetHand() >= 17) 
+            else if (dealer.GetHand() < 21 && dealer.GetHand() >= 17)
             {
                 advice.AppendLine("The dealer has a hand greater than 17. They will stand from here on");
             }
@@ -168,26 +199,24 @@ namespace Blackjack_Trainer
                 }
                 else if (dealer.GetHand() >= client.GetHand())
                 {
-                    MessageBox.Show(dealer.GetHand() + " " + client.GetHand());
-                    advice.AppendLine("Since the dealer has a higher or equal hand than you, the best paths are to either surredner to reduce losses or to hit to hope to win");
+                    advice.AppendLine("Since the dealer has a higher or equal hand than you, the best paths are to either surrender to reduce losses or to hit to hope to win");
                 }
                 else if (dealer.GetHand() < 17 && client.GetHand() > 17)
                 {
                     advice.AppendLine("Since the dealer has a hand less than 17, they can grow to beat you. You can choose if you want to stand, hoping their lower, or hit to be more secure, but also risking busting");
                     if (safeCardProbability > 50)
                     {
-                        advice.AppendLine("Due to the probabilty of drawing a safe card, it is recommended to stand.");
+                        advice.AppendLine("Due to the probability of drawing a safe card, it is recommended to stand.");
                     }
                     else
                     {
-                        advice.AppendLine("Due to the probabilty of drawing a safe card, it is recommended to hit.");
+                        advice.AppendLine("Due to the probability of drawing a safe card, it is recommended to hit.");
                     }
                 }
-                else 
+                else
                 {
                     advice.AppendLine("Game has nothing special or important to say right now. Nothing to say yet");
                 }
-
             }
 
                 //go through every player's every hand to find what cards are currently out of the deck
