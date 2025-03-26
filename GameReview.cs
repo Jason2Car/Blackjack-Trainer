@@ -127,7 +127,7 @@ namespace Blackjack_Trainer
             Player client = players.Last(); // Assuming the client is the last player
             Player dealer = players[0]; // Assuming the dealer is the first player
             int clientHandValue = client.GetHand();
-            MessageBox.Show("" + clientHandValue);
+            //MessageBox.Show("" + clientHandValue);
 
 
             foreach (Player player in players)
@@ -168,7 +168,7 @@ namespace Blackjack_Trainer
                     safeCards++;
                 }
             }
-            MessageBox.Show("safe cards: " + safeCards + " remaining deck: " + remainingDeck.Count);
+            //MessageBox.Show("safe cards: " + safeCards + " remaining deck: " + remainingDeck.Count);
             double safeCardProbability = remainingDeck.Count > 0 ? (double)safeCards / remainingDeck.Count * 100 : 340.0/52;
 
             //double safeCardProbability = (double)safeCards / remainingDeck.Count * 100;

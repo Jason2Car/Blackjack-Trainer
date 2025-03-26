@@ -23,7 +23,7 @@ namespace Blackjack_Trainer
         private List<Card> inHands = new List<Card>();
         private List<Player> players = new List<Player>();
         private List<Player> copyOfPlayers = new List<Player>();
-        private List<int> winings = new List<int>();
+        //private List<int> winings = new List<int>();
         private List<Data> data = new List<Data>();
         private int clientBet;
         private Stack<Stack<Card>> cardsUsed = new Stack<Stack<Card>>();
@@ -35,6 +35,8 @@ namespace Blackjack_Trainer
             InitializeChart();
             chartWinnings.Hide();
             players = p;
+            panelDealerCards.Controls.Clear();
+            txtBxRanking.BringToFront();
             //MessageBox.Show("" + players.Last().stillIn()+" " + players.Last().hasStood());
             //Initialize cards, add one of each suit, total 52
             cards = NewCards();
@@ -62,6 +64,28 @@ namespace Blackjack_Trainer
             //need to initialize players
             this.Load += async (sender, e) => await InitializeGameAsync();
         }
+        private string GetPlayerRankings()
+        {
+            // Remove the dealer (first player) from the list
+            List<Player> playersWithoutDealer = players.Skip(1).ToList();
+
+            // Sort players based on their winnings in descending order
+            List<Player> sortedPlayers = playersWithoutDealer.OrderByDescending(p => p.GetWinnings()).ToList();
+
+            // Build the ranking string
+            StringBuilder ranking = new StringBuilder();
+            ranking.AppendLine("Rankings:");
+
+            for (int i = 0; i < sortedPlayers.Count; i++)
+            {
+                Player player = sortedPlayers[i];
+                string playerLabel = (players.IndexOf(player) == players.Count - 1) ? "You" : $"Player {players.IndexOf(player) + 1}";
+                ranking.AppendLine($"{i + 1}. {playerLabel} - Winnings: {player.GetWinnings()}");
+            }
+
+            return ranking.ToString();
+        }
+
 
         private async Task InitializeGameAsync()
         {
@@ -121,9 +145,12 @@ namespace Blackjack_Trainer
             await PlayGameAsync();
             //MessageBox.Show("Player stillin: " + players.Last().stillIn() + " Player has Stood" + players.Last().hasStood());
             //MessageBox.Show("Player hand: " + players.Last().getHand());
+            txtBxRanking.Visible = true;
+
             int winner = FindWinner(players);
             UpdateChartWithWinnings();
             chartWinnings.Show();
+            txtBxRanking.Text = GetPlayerRankings();
             if (winner == players.Count - 1)
             {
                 MessageBox.Show("Game Over. You won");
@@ -194,6 +221,11 @@ namespace Blackjack_Trainer
                 for (int i = 0; i<players.Count; i++)
                 {
                     Player cur = players[i];
+                    if (!cur.IsDealer() && cur.IsComputer())
+                    {
+                        txtBxCurrentPlayer.Text = "Bot " + players.IndexOf(cur) + "is deciding";
+                        txtBxCurrentPlayer.Show();
+                    }
                     DisplayPlayerHand(cur);
                     if (!cur.IsComputer())//if client
                     {
@@ -228,8 +260,12 @@ namespace Blackjack_Trainer
                         DisplayPlayerHand(cur); //display new hand
                         await PauseAsync(2000);
                         HidePlayerHand(cur); //remove old hand
+                        panelPlayersCards.Controls.Clear();
                     }
 
+
+                    txtBxCurrentPlayer.Text = "";
+                    txtBxCurrentPlayer.Hide();
                 }
             }
             txtBxScorePlayer.Text = "Score: " + players.Last().GetHand();
@@ -363,7 +399,7 @@ namespace Blackjack_Trainer
             else
             {
                 w = clientBet;
-                MessageBox.Show("you winning"+w);
+                //MessageBox.Show("you winning"+w);
                 
             }
             return w;
@@ -374,17 +410,17 @@ namespace Blackjack_Trainer
             Series series = chartWinnings.Series["You"];
             //series.Points.Clear();
             series.Points.AddXY(series.Points.Count, players.Last().GetWinnings());
-            MessageBox.Show("You" + players.Last().GetWinnings());
+            //MessageBox.Show("You" + players.Last().GetWinnings());
 
             series = chartWinnings.Series["Conservative"];
             int outcome = GameSimulation(new ComputerControlledPlayer(1, 0));
             series.Points.AddXY(series.Points.Count, outcome);
-            MessageBox.Show("risky"+outcome);
+            //MessageBox.Show("risky"+outcome);
             
             series = chartWinnings.Series["Risky"];
             outcome = GameSimulation(new ComputerControlledPlayer(1, 1));
             series.Points.AddXY(series.Points.Count, outcome);
-            MessageBox.Show("cons" + outcome);
+            //MessageBox.Show("cons" + outcome);
 
 
         }
@@ -482,6 +518,7 @@ namespace Blackjack_Trainer
                 panelDealerCards.Controls.Clear();
                 panelPlayersCards.Controls.Clear();
                 chartWinnings.Hide();
+                txtBxRanking.Hide();
                 txtBxScoreBot.Text = "Score: ";
                 txtBxScorePlayer.Text = "Score: ";
                 // Show the BettingAmount form to get the client's bet
@@ -499,6 +536,7 @@ namespace Blackjack_Trainer
                         return;
                     }
                 }
+                txtBxCurrentPlayer.Text = "";
                 await InitializeGameAsync();
 
             }

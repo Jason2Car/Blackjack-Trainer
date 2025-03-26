@@ -126,7 +126,7 @@ namespace Blackjack_Trainer
                     playstyle.Location = playLoc;
                     playerSetting.Controls.Add(difficulty);
                     playerSetting.Controls.Add(playstyle);
-                    playerSetting.BackColor = Color.Red;
+                    playerSetting.BackColor = Color.Gray;
                     //player.ForeColor = Color.Green;
                     playerSetting.Width = 400;
                     playerSetting.Height = 50;
